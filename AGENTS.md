@@ -9,6 +9,7 @@
 - **No Next.js directives** — do not add `"use client"` or `"use server"` to any file.
 - **Use Astro components for layout and static content; React components only when the section requires interactivity.**
 - **Every new Supabase table must enable RLS** with per-operation, per-role policies defined in the same migration file.
+- **API errors must use `{ error: { code, message, context } }`**, never `{ error: string }`; keep the envelope consistent across routes and callers.
 
 ## Security & Configuration
 
