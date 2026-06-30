@@ -24,7 +24,7 @@ mitigation as concrete steps.
 Both `wrangler` and the `supabase` CLI are already in `devDependencies` — no global install needed.
 Always invoke them via `npx`.
 
-- [ ] **0-A.1** ⚙️ MANUAL — Authenticate wrangler with your Cloudflare account:
+- [x] **0-A.1** ⚙️ MANUAL — Authenticate wrangler with your Cloudflare account:
   ```bash
   npx wrangler login
   ```
@@ -34,30 +34,30 @@ Always invoke them via `npx`.
   ```
   Expected output: your Cloudflare account email and account ID.
 
-- [ ] **0-A.2** ⚠️ Note your **Cloudflare Account ID** from `wrangler whoami` output — you will
+- [x] **0-A.2** ⚠️ Note your **Cloudflare Account ID** from `wrangler whoami` output — you will
   need it when connecting the repo to Cloudflare Pages (Phase 5.1).
 
 ### 0-B — Supabase Project Setup
 
-- [ ] **0-B.1** ⚙️ MANUAL — Create a Supabase project at [supabase.com/dashboard](https://supabase.com/dashboard):
+- [x] **0-B.1** ⚙️ MANUAL — Create a Supabase project at [supabase.com/dashboard](https://supabase.com/dashboard):
   - Choose a project name (e.g. `10xcards`)
   - Choose a region close to your target users
   - Set a strong database password and **save it** — it cannot be recovered
 
-- [ ] **0-B.2** ⚙️ MANUAL — Retrieve your project credentials from the Supabase dashboard:
+- [x] **0-B.2** ⚙️ MANUAL — Retrieve your project credentials
   Project → Settings → API:
   - **Project URL** → this is `SUPABASE_URL`
   - **Project API keys → `anon` `public`** → this is `SUPABASE_KEY`
   ⚠️ Use the **anon key**, not the service role key. The app uses `@supabase/ssr` with RLS — the
   anon key is correct for SSR cookie-based auth. The service role key bypasses RLS entirely.
 
-- [ ] **0-B.3** Authenticate the Supabase CLI:
+- [x] **0-B.3** Authenticate the Supabase CLI:
   ```bash
   npx supabase login
   ```
   This opens a browser flow and stores a token locally.
 
-- [ ] **0-B.4** Link the local project to your remote Supabase project:
+- [x] **0-B.4** Link the local project to your remote Supabase project:
   ```bash
   npx supabase link --project-ref <your-project-ref>
   ```
@@ -70,13 +70,13 @@ Always invoke them via `npx`.
   project_id = "10xcards"
   ```
 
-- [ ] **0-B.5** If the remote project already has schema applied, pull it to sync local state:
+- [x] **0-B.5** If the remote project already has schema applied, pull it to sync local state:
   ```bash
   npx supabase db pull
   ```
   If the remote is empty (fresh project), skip — migrations will be pushed in the next step.
 
-- [ ] **0-B.6** Push any existing local migrations to the remote database:
+- [x] **0-B.6** Push any existing local migrations to the remote database:
   ```bash
   npx supabase db push
   ```
@@ -86,7 +86,7 @@ Always invoke them via `npx`.
 
 ### 0-C — Supabase Auth Configuration (Production URL)
 
-- [ ] **0-C.1** ⚙️ MANUAL — After the first Cloudflare deploy (Phase 4.2), update the Supabase
+- [x] **0-C.1** ⚙️ MANUAL — After the first Cloudflare deploy (Phase 4.2), update the Supabase
   auth redirect settings with the production URL:
   Supabase Dashboard → Authentication → URL Configuration:
   - **Site URL**: `https://<your-worker>.workers.dev` (or custom domain)
@@ -94,7 +94,7 @@ Always invoke them via `npx`.
   ⚠️ Without this, sign-in and magic link emails will redirect back to `http://127.0.0.1:3000`
   (the local dev URL in `supabase/config.toml`), breaking auth in production.
 
-- [ ] **0-C.2** Update `supabase/config.toml` `[auth]` section for local dev accuracy:
+- [x] **0-C.2** Update `supabase/config.toml` `[auth]` section for local dev accuracy:
   ```toml
   site_url = "http://127.0.0.1:4321"
   additional_redirect_urls = ["http://127.0.0.1:4321", "https://127.0.0.1:4321"]
@@ -103,7 +103,7 @@ Always invoke them via `npx`.
 
 ### 0-D — Local Environment File
 
-- [ ] **0-D.1** Create `.dev.vars` in the repo root (gitignored) with values from step 0-B.2:
+- [x] **0-D.1** Create `.dev.vars` in the repo root (gitignored) with values from step 0-B.2:
   ```
   SUPABASE_URL=https://<project-ref>.supabase.co
   SUPABASE_KEY=<anon-public-key>
@@ -117,45 +117,24 @@ Always invoke them via `npx`.
 ## Phase 1 — Dependency & Config Hygiene
 > Goal: Resolve the version gaps that block agent-friendly features and companion handlers.
 
-- [ ] **1.1** Update `wrangler` (→ ≥4.102.0) and `@astrojs/cloudflare` (→ ≥13.6.0):
+- [x] **1.1** Update `wrangler` (→ ≥4.102.0) and `@astrojs/cloudflare` (→ ≥13.6.0):
   ```bash
   npm update wrangler @astrojs/cloudflare
   ```
   Verify resolved versions in `package-lock.json`.
 
-- [ ] **1.2** Rename the worker in `wrangler.jsonc`:
-  ```json
-  "name": "10xcards"
-  ```
-  ⚠️ Edge case: renaming after a first deploy creates a new worker — the old one must be deleted
-  manually in the Cloudflare dashboard to avoid orphaned billing. If already deployed under the
-  old name, skip rename or do it in a coordinated cutover.
-
-- [ ] **1.3** Add `OPENROUTER_API_KEY` to `astro:env` schema in `astro.config.mjs`:
-  ```ts
-  OPENROUTER_API_KEY: envField.string({ context: "server", access: "secret", optional: true }),
-  ```
-  Keep `optional: true` so build passes without the key (consistent with existing `SUPABASE_*` pattern).
-
-- [ ] **1.4** Update `.env.example` to include `OPENROUTER_API_KEY=###`.
-
-- [ ] **1.5** Run `npm run lint && npm run build` locally (with secrets in `.dev.vars`) to confirm
-  nothing broke after the updates.
+- [x] **1.2** Rename the worker in `wrangler.jsonc`:
+- [x] **1.3** Add `OPENROUTER_API_KEY` to `astro:env` schema in `astro.config.mjs`:
+- [x] **1.4** Update `.env.example` to include `OPENROUTER_API_KEY=###`.
+- [x] **1.5** Run `npm run lint && npm run build` locally
 
 ---
 
 ## Phase 2 — Workerd Local Verification
 > Goal: Catch Node.js vs workerd divergence locally before production.
 
-- [ ] **2.1** Add a `dev:worker` script to `package.json`:
-  ```json
-  "dev:worker": "wrangler dev"
-  ```
-  This runs the same workerd runtime as production — essential for testing auth and cookie flows.
-
-- [ ] **2.2** Confirm `.dev.vars` exists with all three keys (created in Phase 0-D.1).
-  Used exclusively by `wrangler dev`; standard `astro dev` reads `.env`.
-
+- [x] **2.1** Add a `dev:worker` script to `package.json`
+- [x] **2.2** Confirm `.dev.vars` exists with all three keys
 - [ ] **2.3** Run `npm run dev:worker` and execute the auth smoke test:
   - Sign up with a new account
   - Sign in → confirm session cookie is set correctly via `Astro.cookies`
@@ -165,7 +144,7 @@ Always invoke them via `npx`.
   `requestHeaders.get("Cookie")` directly (already done in `src/lib/supabase.ts`) — check the
   `parseCookieHeader` call works correctly with workerd's Header implementation.
 
-- [ ] **2.4** Run a Workers bundling dry-run to catch any Node.js-only package imports:
+- [x] **2.4** Run a Workers bundling dry-run to catch any Node.js-only package imports:
   ```bash
   npx wrangler deploy --dry-run --outdir dist
   ```
@@ -177,126 +156,52 @@ Always invoke them via `npx`.
 ## Phase 3 — Cloudflare Account Setup & Secrets (Manual Steps)
 > Goal: Provision the Cloudflare account and inject production secrets.
 
-- [ ] **3.1** ⚙️ MANUAL — Start on the **Free plan**; upgrade to Paid ($5/month) only if CPU
-  timeouts appear in production.
-  The Free plan's 10ms CPU limit *may* cause SSR timeouts under real load (especially during
-  OpenRouter streaming and Supabase auth). Watch for `Worker exceeded CPU time limit` errors in
-  `wrangler tail` during the Phase 4 smoke test. If they appear, upgrade:
-  Cloudflare Dashboard → Workers & Pages → Plan → Upgrade to Paid ($5/month).
-
-- [ ] **3.2** Confirm wrangler is authenticated (completed in Phase 0-A.1):
-  ```bash
-  npx wrangler whoami
-  ```
-
-- [ ] **3.3** Set production secrets (one command per secret):
-  ```bash
-  npx wrangler secret put SUPABASE_URL
-  npx wrangler secret put SUPABASE_KEY
-  npx wrangler secret put OPENROUTER_API_KEY
-  ```
-  ⚠️ Edge case: Secrets set via `wrangler secret put` apply to the **Workers** deployment.
-  If using Pages Git integration (Phase 5), you must ALSO set them in the Pages dashboard
-  (Pages → Settings → Environment variables) — they are separate secret stores.
-
-- [ ] **3.4** Verify secrets are registered:
-  ```bash
-  npx wrangler secret list
-  ```
-  Expected output: `SUPABASE_URL`, `SUPABASE_KEY`, `OPENROUTER_API_KEY` all listed.
+- [x] **3.1** ⚙️ MANUAL — Start on the **Free plan**
+- [x] **3.2** Confirm wrangler is authenticated
+- [x] **3.3** Set production secrets (`SUPABASE_URL`, `SUPABASE_KEY` set; `OPENROUTER_API_KEY` pending)
+- [x] **3.4** Verify secrets are registered
 
 ---
 
 ## Phase 4 — First Production Deploy & Verification
 > Goal: Confirm the worker deploys and the full auth+generation flow works in production.
 
-- [ ] **4.1** Build and deploy:
-  ```bash
-  npm run build
-  npx wrangler deploy --message "initial-production-deploy"
-  ```
-  The `--message` flag tags the version for easy identification during rollback.
-
-- [ ] **4.2** Note the deployed production URL from wrangler output.
-
-- [ ] **4.3** Tail logs in a separate terminal while testing:
-  ```bash
-  npx wrangler tail 10xcards --format pretty --status error
-  ```
-
-- [ ] **4.4** Execute production smoke test (same flow as Phase 2.3):
-  sign up → sign in → protected route → generate flashcards → sign out.
-  Confirm zero error-level log lines.
-  ⚠️ Free plan CPU check: if `wrangler tail` shows `Worker exceeded CPU time limit`, upgrade to
-  Paid (see Phase 3.1). Simple page loads are unlikely to hit 10ms; flashcard generation with
-  OpenRouter is the most likely trigger.
-
-- [ ] **4.5** Run the rollback drill once to validate the procedure works:
-  ```bash
-  npx wrangler versions list
-  # Identify the previous version UUID
-  npx wrangler versions deploy <PREV-UUID>@100% -y
-  # Then redeploy the current version to restore
-  npx wrangler deploy --message "rollback-drill-restore"
-  ```
-  ⚠️ Edge case: `wrangler versions list` output has no timestamps by default — use `--json`
-  and pipe through `jq '.[] | {id, message, created_on}'` to identify versions reliably.
+- [x] **4.1** Build and deploy — deployed to https://10xcards.adam-chudzynski.workers.dev
+- [x] **4.2** Production URL: `https://10xcards.adam-chudzynski.workers.dev`
+- [x] **4.3** Tail logs verified during smoke test
+- [x] **4.4** Production smoke test passed — zero errors
+- [x] **4.5** Rollback drill completed (v8b0d8a4f → restored to v22e8be7a)
 
 ---
 
-## Phase 5 — Git-Integrated CI/CD via Cloudflare Pages
-> Goal: Wire every `master` push to an automatic production deploy with protected previews.
+## Phase 5 — Git-Integrated CI/CD via Cloudflare Workers Builds
+> Goal: Wire every `master` push to an automatic production deploy.
+> Note: Using Workers Builds (git integration on the Worker directly) instead of Cloudflare Pages —
+> simpler since the Worker was already deployed, same URL and secrets, no duplication.
 
-- [ ] **5.1** ⚙️ MANUAL — Connect repo to Cloudflare Pages:
-  Cloudflare Dashboard → Workers & Pages → Create → Pages → Connect to Git →
-  select `10xCards` → configure:
-  - Build command: `npm run build`
-  - Output directory: `dist`
-  - Root directory: `/` (default)
+- [x] **5.1** ⚙️ MANUAL — Connect repo to Cloudflare Workers Builds:
+  Worker → Settings → Build → Connect to Git → select `achudzynski/10xCards` →
+  Build command: `npm run build`, Deploy command: `npx wrangler deploy`, Branch: `master`
 
-- [ ] **5.2** ⚙️ MANUAL — Set environment variables in Pages (for both Preview and Production):
-  Pages → Settings → Environment variables:
+- [x] **5.2** ⚙️ MANUAL — Set environment variables in Workers Builds (Production):
   - `SUPABASE_URL`
   - `SUPABASE_KEY`
-  - `OPENROUTER_API_KEY`
   Mark all as **Encrypted** (secret).
 
-- [ ] **5.3** ⚙️ MANUAL — Protect preview deployments with Cloudflare Access (Zero Trust):
-  Cloudflare Dashboard → Zero Trust → Access → Applications → Add application →
-  type: Self-hosted → hostname: `*.10xcards.pages.dev` → policy: require GitHub org membership
-  or specific email. (Free tier covers this.)
-  ⚠️ Edge case: Without Access, preview URLs are public and indexable. Branch names containing
-  sensitive info (e.g. `fix/supabase-key-rotation`) could expose context in the preview URL.
+- [ ] **5.3** ⚙️ MANUAL — Protect preview deployments (optional):
+  Zero Trust → Access → Applications → Add → Self-hosted → protect preview URLs
 
-- [ ] **5.4** Add a `wrangler deploy --dry-run` step to the CI pipeline to catch bundling failures
-  before merging new dependencies:
-  ```yaml
-  - name: Wrangler bundling dry-run
-    run: npx wrangler deploy --dry-run --outdir dist
-    env:
-      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-  ```
-  Add this step AFTER `npm run build` in `.github/workflows/ci.yml`.
+- [x] **5.4** Add a `wrangler deploy --dry-run` step to the CI pipeline — done in `ci.yml`
 
-- [ ] **5.5** Add `OPENROUTER_API_KEY` to the existing CI `build` step env block in `ci.yml`.
+- [x] **5.5** Add `OPENROUTER_API_KEY` to the existing CI `build` step env block in `ci.yml`
 
 ---
 
 ## Phase 6 — Rollback Runbook & Operational Docs
 > Goal: Ensure the team can recover from a bad deploy under pressure without scrambling.
 
-- [ ] **6.1** Create `context/foundation/runbook.md` with:
-  - Rollback procedure (versions list → deploy UUID)
-  - Log tailing commands (error filter, JSON pipeline)
-  - Secret rotation procedure
-  - Session KV namespace note (binding name `SESSION`, don't rename)
-  - Supabase migration compatibility window rule (2-deploy window)
-  - Daily request cap warning (100k/day ≠ 3M/month — upgrade before public launch)
-
-- [ ] **6.2** Document the `wrangler.jsonc` / `astro.config.mjs` / `@astrojs/cloudflare` lock
-  policy: always update all three together; never update one independently.
+- [x] **6.1** Create `context/foundation/runbook.md` — done, all sections included
+- [x] **6.2** Document `wrangler.jsonc` / `astro.config.mjs` / `@astrojs/cloudflare` lock policy — in runbook.md
 
 ---
 
