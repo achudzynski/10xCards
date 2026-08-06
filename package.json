@@ -55,8 +55,8 @@
     "typescript-eslint": "^8.59.2",
     "wrangler": "^4.90.0"
   },
-  "overrides": {
-    "vite": "^7.3.2"
+  "engines": {
+    "node": ">=22.13.0"
   },
   "lint-staged": {
     "*.{ts,tsx,astro}": [
