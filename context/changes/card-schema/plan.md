@@ -164,9 +164,9 @@ To roll back: drop the table (`DROP TABLE public.cards CASCADE`) and remove the 
 
 #### Automated
 
-- [x] 2.1 `src/types.ts` exists and exports a `Card` interface
-- [x] 2.2 `npm run lint` passes with the new file
+- [x] 2.1 `src/types.ts` exists and exports a `Card` interface — 8782bf7
+- [x] 2.2 `npm run lint` passes with the new file — 8782bf7
 
 #### Manual
 
-- [x] 2.3 Importing `Card` from `@/types` resolves without error in IDE
+- [x] 2.3 Importing `Card` from `@/types` resolves without error in IDE — 8782bf7
