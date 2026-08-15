@@ -18,6 +18,7 @@ export default function SignUpForm({ serverError }: Props) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string; confirmPassword?: string }>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   function validate() {
     const next: typeof errors = {};
@@ -51,6 +52,8 @@ export default function SignUpForm({ serverError }: Props) {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     if (!validate()) {
       e.preventDefault();
+    } else {
+      setIsSubmitting(true);
     }
   }
 
@@ -126,7 +129,7 @@ export default function SignUpForm({ serverError }: Props) {
 
       <ServerError message={serverError} />
 
-      <SubmitButton pendingText="Creating account..." icon={<UserPlus className="size-4" />}>
+      <SubmitButton pendingText="Creating account..." icon={<UserPlus className="size-4" />} pending={isSubmitting}>
         Create account
       </SubmitButton>
     </form>
