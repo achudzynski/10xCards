@@ -150,23 +150,23 @@ To roll back: drop the table (`DROP TABLE public.cards CASCADE`) and remove the 
 
 #### Automated
 
-- [x] 1.1 Migration file exists at `supabase/migrations/20260815000000_create_cards.sql`
-- [x] 1.2 `supabase db push` exits with code 0
-- [x] 1.3 `npm run lint` passes
+- [x] 1.1 Migration file exists at `supabase/migrations/20260815000000_create_cards.sql` — 742bf22
+- [x] 1.2 `supabase db push` exits with code 0 — 742bf22
+- [x] 1.3 `npm run lint` passes — 742bf22
 
 #### Manual
 
-- [x] 1.4 Supabase Dashboard shows `cards` table with all expected columns and types
-- [x] 1.5 Supabase Dashboard shows four RLS policies on `cards`, one per operation
-- [x] 1.6 RLS isolation confirmed: user A's cards not visible to user B
+- [x] 1.4 Supabase Dashboard shows `cards` table with all expected columns and types — 742bf22
+- [x] 1.5 Supabase Dashboard shows four RLS policies on `cards`, one per operation — 742bf22
+- [x] 1.6 RLS isolation confirmed: user A's cards not visible to user B — 742bf22
 
 ### Phase 2: TypeScript Types
 
 #### Automated
 
-- [ ] 2.1 `src/types.ts` exists and exports a `Card` interface
-- [ ] 2.2 `npm run lint` passes with the new file
+- [x] 2.1 `src/types.ts` exists and exports a `Card` interface
+- [x] 2.2 `npm run lint` passes with the new file
 
 #### Manual
 
-- [ ] 2.3 Importing `Card` from `@/types` resolves without error in IDE
+- [x] 2.3 Importing `Card` from `@/types` resolves without error in IDE
