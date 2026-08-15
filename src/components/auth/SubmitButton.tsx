@@ -9,7 +9,8 @@ interface SubmitButtonProps {
 }
 
 export function SubmitButton({ pendingText, icon, children }: SubmitButtonProps) {
-  const { pending } = useFormStatus();
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  const { pending } = useFormStatus() as { pending: boolean };
 
   return (
     <Button

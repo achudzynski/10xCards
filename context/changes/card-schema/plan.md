@@ -150,15 +150,15 @@ To roll back: drop the table (`DROP TABLE public.cards CASCADE`) and remove the 
 
 #### Automated
 
-- [ ] 1.1 Migration file exists at `supabase/migrations/20260815000000_create_cards.sql`
-- [ ] 1.2 `supabase db push` exits with code 0
-- [ ] 1.3 `npm run lint` passes
+- [x] 1.1 Migration file exists at `supabase/migrations/20260815000000_create_cards.sql`
+- [x] 1.2 `supabase db push` exits with code 0
+- [x] 1.3 `npm run lint` passes
 
 #### Manual
 
-- [ ] 1.4 Supabase Dashboard shows `cards` table with all expected columns and types
-- [ ] 1.5 Supabase Dashboard shows four RLS policies on `cards`, one per operation
-- [ ] 1.6 RLS isolation confirmed: user A's cards not visible to user B
+- [x] 1.4 Supabase Dashboard shows `cards` table with all expected columns and types
+- [x] 1.5 Supabase Dashboard shows four RLS policies on `cards`, one per operation
+- [x] 1.6 RLS isolation confirmed: user A's cards not visible to user B
 
 ### Phase 2: TypeScript Types
 

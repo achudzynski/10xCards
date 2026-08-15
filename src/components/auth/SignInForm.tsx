@@ -33,7 +33,7 @@ export default function SignInForm({ serverError }: Props) {
     if (errors[field]) setErrors((prev) => ({ ...prev, [field]: undefined }));
   }
 
-  function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     if (!validate()) {
       e.preventDefault();
     }
