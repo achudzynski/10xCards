@@ -42,7 +42,7 @@ one (accept / edit / delete), and accepted cards appear in their personal deck.
 
 | ID   | Change ID               | Outcome (user can …)                                                                   | Prerequisites | PRD refs                                                          | Status   |
 |------|-------------------------|----------------------------------------------------------------------------------------|---------------|-------------------------------------------------------------------|----------|
-| F-01 | card-schema             | (foundation) cards table with RLS policies migrated to Supabase; client ready to persist card data | —             | FR-004, FR-009, NFR (data privacy, session durability)            | ready    |
+| F-01 | card-schema             | (foundation) cards table with RLS policies migrated to Supabase; client ready to persist card data | —             | FR-004, FR-009, NFR (data privacy, session durability)            | in-progress |
 | S-01 | first-gated-generation  | paste text → AI-generated card list → gate each card → accepted cards in deck          | F-01          | US-01, FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-009 | proposed |
 | S-02 | deck-management         | create a card manually; edit and delete any saved card                                 | S-01          | FR-008, FR-010, FR-011                                            | proposed |
 | S-03 | srs-review-session      | start a spaced-repetition review session, answer due cards, have schedule updated      | S-01, F-01    | US-02, FR-012, FR-013                                             | blocked  |
@@ -82,7 +82,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** OQ-3 (SRS library choice) will determine which scheduling columns are needed; those SRS-specific fields are NOT required in this foundation — they will be introduced in S-03 when first needed. Owner: user. Block: no.
 - **Risk:** Sequenced first because every vertical slice requires card rows to exist. RLS policies must be correct from the start — adding them retroactively after card data exists risks per-user data-leak bugs in later slices.
-- **Status:** ready
+- **Status:** in-progress
 
 ## Slices
 
