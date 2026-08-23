@@ -1,9 +1,9 @@
 ---
 change_id: card-schema
 title: Cards table with Supabase migrations and RLS (F-01)
-status: implemented
+status: impl_reviewed
 created: 2026-08-15
-updated: 2026-08-15
+updated: 2026-08-23
 archived_at: null
 ---
 
