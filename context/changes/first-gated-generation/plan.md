@@ -482,28 +482,28 @@ No schema changes — the F-01 `cards` table and RLS are sufficient. Only a new 
 
 #### Automated
 
-- [x] 4.1 shadcn primitives exist under `src/components/ui/`
-- [x] 4.2 `npm run lint` passes
-- [x] 4.3 `npm run build` passes
+- [x] 4.1 shadcn primitives exist under `src/components/ui/` — 821791f
+- [x] 4.2 `npm run lint` passes — 821791f
+- [x] 4.3 `npm run build` passes — 821791f
 
 #### Manual
 
-- [x] 4.4 Paste → Generate shows cards one at a time; Accept saves and advances
-- [x] 4.5 Edit changes front/back before accepting; empty/over-length edits blocked in-UI
-- [x] 4.6 Delete/skip advances without saving
-- [x] 4.7 Generation failure shows inline error + Retry (text intact); zero cards shows empty-state
-- [x] 4.8 Finishing shows a summary + working `/deck` link; refresh discards un-accepted cards only
+- [x] 4.4 Paste → Generate shows cards one at a time; Accept saves and advances — 821791f
+- [x] 4.5 Edit changes front/back before accepting; empty/over-length edits blocked in-UI — 821791f
+- [x] 4.6 Delete/skip advances without saving — 821791f
+- [x] 4.7 Generation failure shows inline error + Retry (text intact); zero cards shows empty-state — 821791f
+- [x] 4.8 Finishing shows a summary + working `/deck` link; refresh discards un-accepted cards only — 821791f
 
 ### Phase 5: Deck View
 
 #### Automated
 
-- [ ] 5.1 `npm run lint` passes
-- [ ] 5.2 `npm run build` passes
+- [x] 5.1 `npm run lint` passes
+- [x] 5.2 `npm run build` passes
 
 #### Manual
 
-- [ ] 5.3 `/deck` lists the signed-in user's saved cards (front/back), most-recent first
-- [ ] 5.4 Empty deck shows the empty-state
-- [ ] 5.5 A second user's deck never shows the first user's cards (RLS isolation)
-- [ ] 5.6 Dashboard links to `/generate` and `/deck` work
+- [x] 5.3 `/deck` lists the signed-in user's saved cards (front/back), most-recent first
+- [x] 5.4 Empty deck shows the empty-state
+- [x] 5.5 A second user's deck never shows the first user's cards (RLS isolation)
+- [x] 5.6 Dashboard links to `/generate` and `/deck` work
