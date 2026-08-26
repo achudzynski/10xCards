@@ -98,7 +98,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
   - OQ-2: Text length cap for FR-004 — specific token/character limit; to be resolved during implementation based on AI provider cost and rate-limit tradeoffs. Owner: user. Block: no.
   - AI provider API credentials — must be available before generation can be tested end-to-end; the gating UI (accept/edit/delete) can be built and tested against a mocked response first. Owner: user. Block: no.
 - **Risk:** Heaviest slice: AI provider integration + gating UI + minimal deck view. Derisked by building gating UI against a mocked AI response first, then wiring the real provider. AI response latency directly affects perceived friction — key to the 75% acceptance Success Criterion.
-- **Status:** planning
+- **Status:** in-progress
 
 ### S-02: deck-management
 

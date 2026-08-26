@@ -439,29 +439,29 @@ No schema changes — the F-01 `cards` table and RLS are sufficient. Only a new 
 
 #### Automated
 
-- [x] 1.1 `npm install` succeeds and `zod` is in `package.json` dependencies
-- [x] 1.2 `npm run lint` passes with the new files
-- [x] 1.3 `npm run build` passes (types resolve; `astro sync` clean)
+- [x] 1.1 `npm install` succeeds and `zod` is in `package.json` dependencies — 11c2369
+- [x] 1.2 `npm run lint` passes with the new files — 11c2369
+- [x] 1.3 `npm run build` passes (types resolve; `astro sync` clean) — 11c2369
 
 #### Manual
 
-- [x] 1.4 Card service functions and new DTOs resolve in the IDE
-- [x] 1.5 Error-envelope helper produces the exact `{ error: { code, message, context } }` shape
+- [x] 1.4 Card service functions and new DTOs resolve in the IDE — 11c2369
+- [x] 1.5 Error-envelope helper produces the exact `{ error: { code, message, context } }` shape — 11c2369
 
 ### Phase 2: Generation Backend
 
 #### Automated
 
-- [ ] 2.1 `npm run lint` passes
-- [ ] 2.2 `npm run build` passes
-- [ ] 2.3 Route file exports `prerender = false` and `POST`
+- [x] 2.1 `npm run lint` passes
+- [x] 2.2 `npm run build` passes
+- [x] 2.3 Route file exports `prerender = false` and `POST`
 
 #### Manual
 
-- [ ] 2.4 With no `OPENROUTER_API_KEY`, the mock seam returns canned cards from `POST /api/generate`
-- [ ] 2.5 With a real key, sample text returns valid `{ front, back }` cards
-- [ ] 2.6 Over-5,000-char and empty text return 400 envelopes
-- [ ] 2.7 Simulated provider failure/timeout returns a 502 envelope; pasted text is never logged
+- [x] 2.4 With no `OPENROUTER_API_KEY`, the mock seam returns canned cards from `POST /api/generate`
+- [x] 2.5 With a real key, sample text returns valid `{ front, back }` cards
+- [x] 2.6 Over-5,000-char and empty text return 400 envelopes
+- [x] 2.7 Simulated provider failure/timeout returns a 502 envelope; pasted text is never logged
 
 ### Phase 3: Persistence Backend
 
