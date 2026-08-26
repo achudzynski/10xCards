@@ -2,14 +2,20 @@
 import Layout from "@/layouts/Layout.astro";
 import { createClient } from "@/lib/supabase";
 import { listCards } from "@/lib/services/cards";
+import { Card as UiCard, CardContent } from "@/components/ui/card";
 import type { Card } from "@/types";
 
 const { user } = Astro.locals;
 const supabase = createClient(Astro.request.headers, Astro.cookies);
 
 let cards: Card[] = [];
+let loadError = false;
 if (supabase && user) {
-  cards = await listCards(supabase, user.id);
+  try {
+    cards = await listCards(supabase, user.id);
+  } catch {
+    loadError = true;
+  }
 }
 ---
 
@@ -29,7 +35,12 @@ if (supabase && user) {
       </div>
 
       {
-        cards.length === 0 ? (
+        loadError ? (
+          <div class="rounded-2xl border border-white/10 bg-white/10 p-8 text-center text-white backdrop-blur-xl">
+            <p class="text-blue-100/80">We couldn't load your deck right now.</p>
+            <p class="mt-2 text-sm text-blue-100/50">Please refresh the page to try again.</p>
+          </div>
+        ) : cards.length === 0 ? (
           <div class="rounded-2xl border border-white/10 bg-white/10 p-8 text-center text-white backdrop-blur-xl">
             <p class="text-blue-100/80">Your deck is empty.</p>
             <p class="mt-2 text-sm text-blue-100/50">
@@ -43,9 +54,13 @@ if (supabase && user) {
         ) : (
           <ul class="space-y-4">
             {cards.map((card) => (
-              <li class="rounded-2xl border border-white/10 bg-white/10 p-6 text-white backdrop-blur-xl">
-                <p class="font-semibold">{card.front}</p>
-                <p class="mt-2 text-blue-100/80">{card.back}</p>
+              <li>
+                <UiCard>
+                  <CardContent>
+                    <p class="font-semibold">{card.front}</p>
+                    <p class="text-muted-foreground mt-2">{card.back}</p>
+                  </CardContent>
+                </UiCard>
               </li>
             ))}
           </ul>

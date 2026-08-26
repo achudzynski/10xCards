@@ -14,8 +14,15 @@ export class GenerationError extends Error {
   }
 }
 
+const CARD_MAX_LEN = 100;
+
 const flashcardsSchema = z.object({
   cards: z.array(z.object({ front: z.string(), back: z.string() })),
+});
+
+const savableCardSchema = z.object({
+  front: z.string().trim().min(1).max(CARD_MAX_LEN),
+  back: z.string().trim().min(1).max(CARD_MAX_LEN),
 });
 
 const RESPONSE_JSON_SCHEMA = {
@@ -118,5 +125,10 @@ export async function generateCards(text: string): Promise<GeneratedCard[]> {
     throw new GenerationError("Generation provider returned cards in an invalid shape");
   }
 
-  return result.data.cards.slice(0, MAX_CARDS);
+  return result.data.cards
+    .flatMap((card) => {
+      const parsed = savableCardSchema.safeParse(card);
+      return parsed.success ? [parsed.data] : [];
+    })
+    .slice(0, MAX_CARDS);
 }
