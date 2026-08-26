@@ -452,31 +452,31 @@ No schema changes — the F-01 `cards` table and RLS are sufficient. Only a new 
 
 #### Automated
 
-- [x] 2.1 `npm run lint` passes
-- [x] 2.2 `npm run build` passes
-- [x] 2.3 Route file exports `prerender = false` and `POST`
+- [x] 2.1 `npm run lint` passes — a3b1985
+- [x] 2.2 `npm run build` passes — a3b1985
+- [x] 2.3 Route file exports `prerender = false` and `POST` — a3b1985
 
 #### Manual
 
-- [x] 2.4 With no `OPENROUTER_API_KEY`, the mock seam returns canned cards from `POST /api/generate`
-- [x] 2.5 With a real key, sample text returns valid `{ front, back }` cards
-- [x] 2.6 Over-5,000-char and empty text return 400 envelopes
-- [x] 2.7 Simulated provider failure/timeout returns a 502 envelope; pasted text is never logged
+- [x] 2.4 With no `OPENROUTER_API_KEY`, the mock seam returns canned cards from `POST /api/generate` — a3b1985
+- [x] 2.5 With a real key, sample text returns valid `{ front, back }` cards — a3b1985
+- [x] 2.6 Over-5,000-char and empty text return 400 envelopes — a3b1985
+- [x] 2.7 Simulated provider failure/timeout returns a 502 envelope; pasted text is never logged — a3b1985
 
 ### Phase 3: Persistence Backend
 
 #### Automated
 
-- [ ] 3.1 `npm run lint` passes
-- [ ] 3.2 `npm run build` passes
-- [ ] 3.3 Route exports `prerender = false` and `POST`; middleware lists `/generate` and `/deck`
+- [x] 3.1 `npm run lint` passes
+- [x] 3.2 `npm run build` passes
+- [x] 3.3 Route exports `prerender = false` and `POST`; middleware lists `/generate` and `/deck`
 
 #### Manual
 
-- [ ] 3.4 `POST /api/cards` inserts a row (`is_ai_generated = true`) and returns 201 with the card
-- [ ] 3.5 Empty or > 100-char `front`/`back` returns 400 envelope
-- [ ] 3.6 Unauthenticated `/api/cards` returns 401; `/generate` and `/deck` redirect when signed out
-- [ ] 3.7 Second test user cannot see the first user's card (RLS isolation)
+- [x] 3.4 `POST /api/cards` inserts a row (`is_ai_generated = true`) and returns 201 with the card
+- [x] 3.5 Empty or > 100-char `front`/`back` returns 400 envelope
+- [x] 3.6 Unauthenticated `/api/cards` returns 401; `/generate` and `/deck` redirect when signed out
+- [x] 3.7 Second test user cannot see the first user's card (RLS isolation)
 
 ### Phase 4: Gating UI
 
