@@ -498,12 +498,12 @@ No schema changes — the F-01 `cards` table and RLS are sufficient. Only a new 
 
 #### Automated
 
-- [x] 5.1 `npm run lint` passes
-- [x] 5.2 `npm run build` passes
+- [x] 5.1 `npm run lint` passes — f64fa90
+- [x] 5.2 `npm run build` passes — f64fa90
 
 #### Manual
 
-- [x] 5.3 `/deck` lists the signed-in user's saved cards (front/back), most-recent first
-- [x] 5.4 Empty deck shows the empty-state
-- [x] 5.5 A second user's deck never shows the first user's cards (RLS isolation)
-- [x] 5.6 Dashboard links to `/generate` and `/deck` work
+- [x] 5.3 `/deck` lists the signed-in user's saved cards (front/back), most-recent first — f64fa90
+- [x] 5.4 Empty deck shows the empty-state — f64fa90
+- [x] 5.5 A second user's deck never shows the first user's cards (RLS isolation) — f64fa90
+- [x] 5.6 Dashboard links to `/generate` and `/deck` work — f64fa90
