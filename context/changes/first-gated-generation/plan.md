@@ -467,32 +467,32 @@ No schema changes — the F-01 `cards` table and RLS are sufficient. Only a new 
 
 #### Automated
 
-- [x] 3.1 `npm run lint` passes
-- [x] 3.2 `npm run build` passes
-- [x] 3.3 Route exports `prerender = false` and `POST`; middleware lists `/generate` and `/deck`
+- [x] 3.1 `npm run lint` passes — 400b487
+- [x] 3.2 `npm run build` passes — 400b487
+- [x] 3.3 Route exports `prerender = false` and `POST`; middleware lists `/generate` and `/deck` — 400b487
 
 #### Manual
 
-- [x] 3.4 `POST /api/cards` inserts a row (`is_ai_generated = true`) and returns 201 with the card
-- [x] 3.5 Empty or > 100-char `front`/`back` returns 400 envelope
-- [x] 3.6 Unauthenticated `/api/cards` returns 401; `/generate` and `/deck` redirect when signed out
-- [x] 3.7 Second test user cannot see the first user's card (RLS isolation)
+- [x] 3.4 `POST /api/cards` inserts a row (`is_ai_generated = true`) and returns 201 with the card — 400b487
+- [x] 3.5 Empty or > 100-char `front`/`back` returns 400 envelope — 400b487
+- [x] 3.6 Unauthenticated `/api/cards` returns 401; `/generate` and `/deck` redirect when signed out — 400b487
+- [x] 3.7 Second test user cannot see the first user's card (RLS isolation) — 400b487
 
 ### Phase 4: Gating UI
 
 #### Automated
 
-- [ ] 4.1 shadcn primitives exist under `src/components/ui/`
-- [ ] 4.2 `npm run lint` passes
-- [ ] 4.3 `npm run build` passes
+- [x] 4.1 shadcn primitives exist under `src/components/ui/`
+- [x] 4.2 `npm run lint` passes
+- [x] 4.3 `npm run build` passes
 
 #### Manual
 
-- [ ] 4.4 Paste → Generate shows cards one at a time; Accept saves and advances
-- [ ] 4.5 Edit changes front/back before accepting; empty/over-length edits blocked in-UI
-- [ ] 4.6 Delete/skip advances without saving
-- [ ] 4.7 Generation failure shows inline error + Retry (text intact); zero cards shows empty-state
-- [ ] 4.8 Finishing shows a summary + working `/deck` link; refresh discards un-accepted cards only
+- [x] 4.4 Paste → Generate shows cards one at a time; Accept saves and advances
+- [x] 4.5 Edit changes front/back before accepting; empty/over-length edits blocked in-UI
+- [x] 4.6 Delete/skip advances without saving
+- [x] 4.7 Generation failure shows inline error + Retry (text intact); zero cards shows empty-state
+- [x] 4.8 Finishing shows a summary + working `/deck` link; refresh discards un-accepted cards only
 
 ### Phase 5: Deck View
 
