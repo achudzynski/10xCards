@@ -45,7 +45,7 @@ one (accept / edit / delete), and accepted cards appear in their personal deck.
 | F-01 | card-schema             | (foundation) cards table with RLS policies migrated to Supabase; client ready to persist card data | —             | FR-004, FR-009, NFR (data privacy, session durability)            | done |
 | S-01 | first-gated-generation  | paste text → AI-generated card list → gate each card → accepted cards in deck          | F-01          | US-01, FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-009 | done |
 | S-02 | deck-management         | create a card manually; edit and delete any saved card                                 | S-01          | FR-008, FR-010, FR-011                                            | proposed |
-| S-03 | srs-review-session      | start a spaced-repetition review session, answer due cards, have schedule updated      | S-01, F-01    | US-02, FR-012, FR-013                                             | blocked  |
+| S-03 | srs-review-session      | start a spaced-repetition review session, answer due cards, have schedule updated      | S-01, F-01    | US-02, FR-012, FR-013                                             | ready    |
 
 ## Streams
 
@@ -55,7 +55,7 @@ in the dependency graph below; this table is the proposed reading order across p
 | Stream | Theme           | Chain                         | Note                                                                                              |
 |--------|-----------------|-------------------------------|---------------------------------------------------------------------------------------------------|
 | A      | Creation loop   | `F-01` → `S-01` → `S-02`     | The minimum required sequence for speed-mode: schema → gated generation (north star) → full deck management. |
-| B      | Review loop     | `S-03`                        | Joins Stream A at `S-01`; blocked on OQ-3 (SRS library choice) until resolved.                  |
+| B      | Review loop     | `S-03`                        | Joins Stream A at `S-01`; OQ-3 resolved (SM-2) — ready to plan.                  |
 
 ## Baseline
 
@@ -106,7 +106,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Change ID:** deck-management
 - **PRD refs:** FR-008, FR-010, FR-011
 - **Prerequisites:** S-01
-- **Parallel with:** S-03 (once S-01 is done and OQ-3 is resolved, S-02 and S-03 have no dependency on each other and can be built in parallel)
+- **Parallel with:** S-03 (S-01 is done and OQ-3 is resolved; S-02 and S-03 have no dependency on each other and can be built in parallel)
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Smallest slice; sequenced after S-01 because manual card management only matters once a deck exists. Editing a card that has an SRS schedule (FR-010) creates an edge case — the PRD resolution states the schedule survives content changes; important to confirm this behaviour before implementation to avoid later migration.
@@ -118,12 +118,11 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Change ID:** srs-review-session
 - **PRD refs:** US-02, FR-012, FR-013
 - **Prerequisites:** S-01, F-01
-- **Parallel with:** S-02 (once OQ-3 is resolved, S-02 and S-03 have no dependency on each other)
+- **Parallel with:** S-02 (no dependency on each other; can be built in parallel)
 - **Blockers:** —
-- **Unknowns:**
-  - OQ-3: Which SRS library to integrate (SM-2, FSRS, or other)? Determines the answer schema for FR-013 (binary pass/fail vs. 0–5 self-rating) and the SRS-specific columns needed in the card table. Owner: user. Block: yes.
-- **Risk:** Blocked until OQ-3 resolves; the answer schema drives the review UI and the card table schema extension. NFR (session progress must survive browser refresh) adds state-persistence complexity — review session state must be durable, not in-memory.
-- **Status:** blocked
+- **Unknowns:** —
+- **Risk:** The SM-2 answer schema (0–5 self-rating) drives the review UI and requires new SRS-specific columns (`ease_factor`, `interval`, `repetitions`, `due_date`) on the card table. NFR (session progress must survive browser refresh) adds state-persistence complexity — review session state must be durable, not in-memory.
+- **Status:** ready
 
 ## Backlog Handoff
 
@@ -132,13 +131,13 @@ Foundations below assume these are present and do NOT re-scaffold them.
 | F-01       | card-schema            | Set up cards table with Supabase migrations and RLS       | yes                   | Run `/10x-plan card-schema`                               |
 | S-01       | first-gated-generation | AI flashcard generation + gating flow (north star)        | no                    | Requires F-01 to complete first                           |
 | S-02       | deck-management        | Manual card creation, edit, and delete                    | no                    | Requires S-01 to complete first                           |
-| S-03       | srs-review-session     | Spaced-repetition review session                          | no                    | Blocked on OQ-3 (SRS library choice); resolve before planning |
+| S-03       | srs-review-session     | Spaced-repetition review session                          | yes                   | SM-2 chosen for OQ-3 (2026-09-03); run `/10x-plan srs-review-session` |
 
 ## Open Roadmap Questions
 
 1. **OQ-1: What are the acceptance criteria for US-01 (AI generation)?** — Minimum card count per generation, expected response time, empty-state behavior when input text yields no extractable concepts. Owner: user. Block: no (MVP can ship; criteria needed for testing S-01). Affects: S-01 verification.
 2. **OQ-2: What is the text length cap for FR-004?** — Token/character limit based on chosen AI provider's cost and rate-limit tradeoffs. Owner: user. Block: no. Affects: S-01.
-3. **OQ-3: Which SRS library will be integrated for FR-012?** — SM-2, FSRS, or other; determines the answer schema for FR-013 and SRS-specific scheduling columns in the card table. Owner: user. Block: yes — gates S-03. Affects: S-03.
+3. ~~**OQ-3: Which SRS library will be integrated for FR-012?**~~ **Resolved 2026-09-03: SM-2.** Chosen for simplicity — a small, dependency-free formula (ease factor, interval, repetitions) well suited to MVP scale; FR-013's answer schema is a 0–5 self-rating. New SRS-specific columns (`ease_factor`, `interval`, `repetitions`, `due_date`) will be added to the card table in S-03. Unblocks S-03.
 
 ## Parked
 
