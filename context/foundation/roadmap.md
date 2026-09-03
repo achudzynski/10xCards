@@ -3,7 +3,7 @@ project: "10xCards"
 version: 1
 status: draft
 created: 2026-08-15
-updated: 2026-08-24
+updated: 2026-09-03
 prd_version: 1
 main_goal: speed
 top_blocker: time
@@ -43,7 +43,7 @@ one (accept / edit / delete), and accepted cards appear in their personal deck.
 | ID   | Change ID               | Outcome (user can …)                                                                   | Prerequisites | PRD refs                                                          | Status   |
 |------|-------------------------|----------------------------------------------------------------------------------------|---------------|-------------------------------------------------------------------|----------|
 | F-01 | card-schema             | (foundation) cards table with RLS policies migrated to Supabase; client ready to persist card data | —             | FR-004, FR-009, NFR (data privacy, session durability)            | in-progress |
-| S-01 | first-gated-generation  | paste text → AI-generated card list → gate each card → accepted cards in deck          | F-01          | US-01, FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-009 | in-progress |
+| S-01 | first-gated-generation  | paste text → AI-generated card list → gate each card → accepted cards in deck          | F-01          | US-01, FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-009 | done |
 | S-02 | deck-management         | create a card manually; edit and delete any saved card                                 | S-01          | FR-008, FR-010, FR-011                                            | proposed |
 | S-03 | srs-review-session      | start a spaced-repetition review session, answer due cards, have schedule updated      | S-01, F-01    | US-02, FR-012, FR-013                                             | blocked  |
 
@@ -98,7 +98,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
   - OQ-2: Text length cap for FR-004 — specific token/character limit; to be resolved during implementation based on AI provider cost and rate-limit tradeoffs. Owner: user. Block: no.
   - AI provider API credentials — must be available before generation can be tested end-to-end; the gating UI (accept/edit/delete) can be built and tested against a mocked response first. Owner: user. Block: no.
 - **Risk:** Heaviest slice: AI provider integration + gating UI + minimal deck view. Derisked by building gating UI against a mocked AI response first, then wiring the real provider. AI response latency directly affects perceived friction — key to the 75% acceptance Success Criterion.
-- **Status:** in-progress
+- **Status:** done
 
 ### S-02: deck-management
 
@@ -153,3 +153,5 @@ Foundations below assume these are present and do NOT re-scaffold them.
 ## Done
 
 (Empty on first generation. `/10x-archive` appends an entry here — and flips that item's `Status` to `done` — when a change whose `Change ID` matches a roadmap item is archived.)
+
+- **S-01: user can paste a block of text, trigger AI card generation, review generated cards one-by-one (accepting, editing front/back, or deleting each), and see accepted cards listed in their personal deck.** — Archived 2026-09-03 → `context/archive/2026-08-23-first-gated-generation/`. Lesson: —.
