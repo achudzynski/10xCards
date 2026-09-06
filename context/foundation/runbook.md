@@ -3,16 +3,19 @@
 ## Rollback Procedure
 
 List versions with timestamps:
+
 ```bash
 npx wrangler versions list --json | node -e "const d=JSON.parse(require('fs').readFileSync('/dev/stdin','utf8')); d.forEach(v=>console.log(v.id, v.metadata?.created_on, v.annotations?.['workers/message']))"
 ```
 
 Deploy a specific previous version:
+
 ```bash
 npx wrangler versions deploy <PREV-UUID>@100% -y
 ```
 
 Restore after drill:
+
 ```bash
 npx wrangler deploy --message "rollback-drill-restore"
 ```
@@ -20,11 +23,13 @@ npx wrangler deploy --message "rollback-drill-restore"
 ## Log Tailing
 
 Tail errors only (production):
+
 ```bash
 npx wrangler tail 10xcards --format pretty --status error
 ```
 
 Tail all logs as JSON (pipe to jq for filtering):
+
 ```bash
 npx wrangler tail 10xcards --format json | jq '.exceptions[], .logs[] | select(.level == "error")'
 ```
@@ -78,11 +83,11 @@ streaming responses under real load.
 
 These three are tightly coupled and **must always be updated together**:
 
-| File | Field |
-|------|-------|
-| `package.json` | `wrangler` and `@astrojs/cloudflare` version pins |
-| `wrangler.jsonc` | `compatibility_date`, `compatibility_flags` |
-| `astro.config.mjs` | `adapter: cloudflare()` options |
+| File               | Field                                             |
+| ------------------ | ------------------------------------------------- |
+| `package.json`     | `wrangler` and `@astrojs/cloudflare` version pins |
+| `wrangler.jsonc`   | `compatibility_date`, `compatibility_flags`       |
+| `astro.config.mjs` | `adapter: cloudflare()` options                   |
 
 **Never update one in isolation.** A `wrangler` version bump without an `@astrojs/cloudflare`
 bump (or vice versa) can cause silent runtime mismatches between the local workerd version used

@@ -202,5 +202,5 @@ the current architecture (the service layer can be swapped without touching the 
 5. **Streaming vs. single response** — MVP can use a single non-streamed generation call; streaming
    the card list is a later UX refinement.
 6. **Partial-accept semantics** — if the user accepts some cards and leaves, is the session state
-   persisted? PRD NFR about durable progress targets the *review* session (S-03), not generation;
+   persisted? PRD NFR about durable progress targets the _review_ session (S-03), not generation;
    assume in-memory gating for S-01 unless the user wants otherwise.

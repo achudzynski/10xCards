@@ -38,7 +38,7 @@ Professionals learning new domain knowledge (developers, doctors, lawyers) have 
 but must hand-craft every card, which is tedious enough to abandon the method altogether.
 
 Existing tools (Anki, Quizlet) focus on the review side of the loop; nobody has solved fast,
-high-quality card *creation*. The insight: reduce creation friction to near-zero and the proven
+high-quality card _creation_. The insight: reduce creation friction to near-zero and the proven
 spaced-repetition method becomes accessible to anyone with a block of text to study.
 
 ## User & Persona
@@ -54,14 +54,17 @@ time to manually produce cards from it.
 ## Success Criteria
 
 ### Primary
+
 - 75% of AI-generated flashcards are accepted by the user (not edited-out or deleted).
 - Users create 75% of their flashcards using AI generation (vs. manual creation).
 
 ### Secondary
+
 - Users return for a second review session (indicating the first session created enough value
   to warrant coming back).
 
 ### Guardrails
+
 - A review session must never lose progress or show the wrong card — any such failure is treated
   as a regression regardless of primary metric performance.
 
@@ -82,6 +85,7 @@ scoped strictly to the authenticated user — one user cannot see another's card
 - **Then** they see a list of AI-generated flashcards, each with a front (question) and back (answer), ready for review
 
 #### Acceptance Criteria
+
 - _Open question — acceptance criteria (minimum card count, response time, empty-state) to be defined; see Open Questions._
 
 ### US-02: User completes a spaced-repetition review session
@@ -91,52 +95,67 @@ scoped strictly to the authenticated user — one user cannot see another's card
 - **Then** the app records their answers and schedules each card's next review according to the SRS algorithm
 
 #### Acceptance Criteria
+
 - Progress is never lost if the user closes and reopens the app mid-session.
 - Cards are surfaced in the order determined by the SRS algorithm, not in creation order.
 
 ## Functional Requirements
 
 ### Authentication
+
 - FR-001: User can register with email and password. Priority: must-have
+
   > Socrates: Counter-argument considered: "Registration is friction — a user who can't try without an account may never reach the moment where it proves its value." Resolution: kept; card persistence across sessions requires identity.
 
 - FR-002: User can log in with email and password. Priority: must-have
+
   > Socrates: Counter-argument considered: "Session management, tokens, and password reset add implementation effort that delays core AI generation." Resolution: kept; login is the gate to a user's personal deck.
 
 - FR-003: User can log out. Priority: must-have
   > Socrates: Counter-argument considered: "Explicit logout is rarely used on personal devices — session expiry could cover this for MVP." Resolution: kept; basic security requirement.
 
 ### Card Generation
+
 - FR-004: User can paste text (up to a capped length) and trigger AI generation of flashcards. Priority: must-have
   > Socrates: Counter-argument considered: "AI quality is unpredictable — poor early cards break trust and the 75% acceptance metric before the product proves itself." Resolution: kept as core value proposition; text length capped for MVP to manage cost and complexity.
 
 ### Card Management
+
 - FR-005: User can review AI-generated cards one-by-one and accept each one. Priority: must-have
+
   > Socrates: Counter-argument considered: "Card-by-card review may itself be friction — reviewing 20 cards individually takes longer than creating them manually." Resolution: kept; one-by-one review gives the user full control over what enters their deck.
 
 - FR-006: User can edit an AI-generated card before saving. Priority: must-have
+
   > Socrates: Counter-argument considered: "Editing before saving encourages over-polishing." Resolution: kept; editing is necessary when AI quality isn't perfect.
 
 - FR-007: User can delete an AI-generated card before saving. Priority: must-have
+
   > Socrates: Counter-argument considered: "If FR-006 (edit) exists, deletion is redundant — a bad card can be edited into a good one." Resolution: kept; deletion is the explicit reject action and is semantically distinct from editing.
 
 - FR-008: User can create a flashcard manually (front and back). Priority: must-have
+
   > Socrates: Counter-argument considered: "Manual creation is the status quo the product is replacing — including it as must-have validates the old workflow." Resolution: kept; some knowledge cannot be expressed in paste-able text, and manual creation complements AI generation.
 
 - FR-009: User can view all saved flashcards in their deck. Priority: must-have
+
   > Socrates: Counter-argument considered: "A browseable card list is table-stakes but not the value differentiator — it costs time that could go toward AI quality." Resolution: kept; users need to audit and manage their deck.
 
 - FR-010: User can edit a saved flashcard. Priority: must-have
+
   > Socrates: Counter-argument considered: "Post-save editing with SRS creates edge cases — what happens to the schedule when card content changes?" Resolution: kept; cards need correction after reviewing with the SRS.
 
 - FR-011: User can delete a saved flashcard. Priority: must-have
   > Socrates: Counter-argument considered: "Hard-deleting after SRS entry erases review history — regret loses learning progression data." Resolution: kept; bad cards should be removable at any time; progression data loss is an accepted tradeoff for MVP.
 
 ### Review
+
 - FR-012: User can start a spaced-repetition review session using a ready-made SRS library. Priority: must-have
+
   > Socrates: Counter-argument considered: "Integrating an SRS algorithm could push MVP past 3 weeks — a simple daily review without scheduling could prove the concept first." Resolution: constrained to use a ready-made SRS library (not built from scratch) to keep within timeline.
 
 - FR-013: User can answer a flashcard during a review session (per the SRS answer schema). Priority: must-have
+
   > Socrates: Counter-argument considered: "Binary pass/fail is noisy — explicit self-rating would give the SRS better signal." Resolution: kept; answer schema is determined by the chosen SRS library's interface, not invented from scratch.
 
 - FR-014: User can see the next scheduled review date for a card. Priority: nice-to-have

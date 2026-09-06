@@ -19,24 +19,26 @@ The project is already fully wired for Cloudflare: `@astrojs/cloudflare@^13.5.0`
 
 ## Platform Comparison
 
-| Platform | CLI-first | Managed | Agent Docs | Stable Deploy API | MCP | **Total** |
-|---|---|---|---|---|---|---|
-| **Cloudflare Workers + Pages** | ✅ Pass | ✅ Pass | ✅ Pass | ✅ Pass | ✅ Pass | **10** |
-| **Vercel** | ✅ Pass | ✅ Pass | ⚡ Partial | ✅ Pass | ✅ Pass | **9** |
-| **Railway** | ⚡ Partial | ✅ Pass | ✅ Pass | ⚡ Partial | ✅ Pass | **8** |
-| **Netlify** | ⚡ Partial | ✅ Pass | ✅ Pass | ⚡ Partial | ✅ Pass | **8** |
-| **Render** | ⚡ Partial | ✅ Pass | ✅ Pass | ⚡ Partial | ✅ Pass | **8** |
-| **Fly.io** | ✅ Pass | ✅ Pass | ✅ Pass | ✅ Pass | ❌ Fail | **8** |
+| Platform                       | CLI-first  | Managed | Agent Docs | Stable Deploy API | MCP     | **Total** |
+| ------------------------------ | ---------- | ------- | ---------- | ----------------- | ------- | --------- |
+| **Cloudflare Workers + Pages** | ✅ Pass    | ✅ Pass | ✅ Pass    | ✅ Pass           | ✅ Pass | **10**    |
+| **Vercel**                     | ✅ Pass    | ✅ Pass | ⚡ Partial | ✅ Pass           | ✅ Pass | **9**     |
+| **Railway**                    | ⚡ Partial | ✅ Pass | ✅ Pass    | ⚡ Partial        | ✅ Pass | **8**     |
+| **Netlify**                    | ⚡ Partial | ✅ Pass | ✅ Pass    | ⚡ Partial        | ✅ Pass | **8**     |
+| **Render**                     | ⚡ Partial | ✅ Pass | ✅ Pass    | ⚡ Partial        | ✅ Pass | **8**     |
+| **Fly.io**                     | ✅ Pass    | ✅ Pass | ✅ Pass    | ✅ Pass           | ❌ Fail | **8**     |
 
 **Scoring notes:**
-- *Vercel Agent Docs (Partial)*: No `llms.txt` found at vercel.com; gap partially covered by `mcp.vercel.com` and `vercel agent init`.
-- *Railway/Netlify/Render Deploy API (Partial)*: No CLI rollback command — dashboard or API only.
-- *Netlify CLI-first (Partial)*: No CLI rollback; `netlify logs` function-streaming CLI status uncertain in recent versions.
-- *Fly.io MCP (Fail)*: No native MCP server found; `fly.io/llms.txt` exists but no structured tool-use integration.
+
+- _Vercel Agent Docs (Partial)_: No `llms.txt` found at vercel.com; gap partially covered by `mcp.vercel.com` and `vercel agent init`.
+- _Railway/Netlify/Render Deploy API (Partial)_: No CLI rollback command — dashboard or API only.
+- _Netlify CLI-first (Partial)_: No CLI rollback; `netlify logs` function-streaming CLI status uncertain in recent versions.
+- _Fly.io MCP (Fail)_: No native MCP server found; `fly.io/llms.txt` exists but no structured tool-use integration.
 
 **Hard filters applied:** No platform was filtered — Q1 (no persistent connections needed) means serverless-only platforms (Vercel, Netlify) remain eligible. Tech stack runtime (Cloudflare Workers) is a strong soft preference; platforms requiring an adapter swap (Vercel, Netlify, Railway, Render, Fly.io) carry real migration friction.
 
 **Interview weights applied:**
+
 - Q2 (no strong cost/DX preference): neutral
 - Q3 (AWS/GCP/Azure familiarity): none of the 6 candidates match → no tie-breaking effect
 - Q4 (single region): no preference for edge-native → neutral
@@ -106,45 +108,51 @@ The cumulative lesson: workerd is a powerful runtime, but it is not Node.js, and
 
 ## Risk Register
 
-| Risk | Source | Likelihood | Impact | Mitigation |
-|---|---|---|---|---|
-| Free plan 10ms CPU limit blocks SSR | Research finding | H | H | Deploy to Paid plan ($5/mo) from day one; do not use Free plan for SSR workloads |
-| workerd ≠ Node.js causes production-only bugs | Devil's advocate | M | H | Run `wrangler dev` (not `astro dev`) for all auth and cookie-related testing; add workerd smoke test to CI |
-| Supabase JS compatibility issues under workerd | Unknown unknowns | M | H | Test all auth flows (`login`, `logout`, `session refresh`) explicitly against `wrangler dev` before first production deploy; watch @supabase/ssr changelogs for workerd-specific fixes |
-| No `wrangler rollback` command under incident pressure | Devil's advocate | M | M | Document the rollback procedure (`wrangler versions list` + `wrangler versions deploy`) in a runbook before go-live; pin version tags with `--message` at deploy time for easier identification |
-| Wrangler version gap (^4.90.0 < 4.102.0) | Devil's advocate | M | L | Run `npm update wrangler` before first production deploy to resolve `^4.90.0` to latest; adds `--temporary` deploy and other AI-agent-friendly features |
-| `wrangler.jsonc` / adapter / Cloudflare compat drift | Unknown unknowns | M | M | Lock `@astrojs/cloudflare` and `wrangler` in CI; add a compatibility smoke test that exercises the `nodejs_compat` flag on `wrangler dev` |
-| Workers bundling fails on npm package with Node.js-only APIs | Unknown unknowns | L | M | Run `wrangler deploy --dry-run` in CI before merging new dependencies; review `node:` usage in any new library before adoption |
-| Session KV namespace lost after project rename or binding rotation | Unknown unknowns | L | M | Document the `SESSION` binding name; include it in the deployment checklist; test session persistence after any wrangler.jsonc change |
-| Free-tier daily request cap hit by traffic spike | Unknown unknowns | L | M | Upgrade to Paid plan ($5/mo) before any public launch or marketing event; set Cloudflare rate limiting rules to protect against bots consuming the free cap |
-| Supabase migrations don't roll back with code rollback | Pre-mortem | M | H | Always write backward-compatible migrations (never `DROP COLUMN` without a code-driven migration window); maintain a 2-deploy compatibility window between schema change and code change |
-| `@astrojs/cloudflare@^13.5.0` misses companion handlers (13.6.0+) | Research finding | M | L | Run `npm update @astrojs/cloudflare` to resolve to 13.6.0+; companion handlers improve routing pipeline middleware integration |
+| Risk                                                               | Source           | Likelihood | Impact | Mitigation                                                                                                                                                                                      |
+| ------------------------------------------------------------------ | ---------------- | ---------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Free plan 10ms CPU limit blocks SSR                                | Research finding | H          | H      | Deploy to Paid plan ($5/mo) from day one; do not use Free plan for SSR workloads                                                                                                                |
+| workerd ≠ Node.js causes production-only bugs                      | Devil's advocate | M          | H      | Run `wrangler dev` (not `astro dev`) for all auth and cookie-related testing; add workerd smoke test to CI                                                                                      |
+| Supabase JS compatibility issues under workerd                     | Unknown unknowns | M          | H      | Test all auth flows (`login`, `logout`, `session refresh`) explicitly against `wrangler dev` before first production deploy; watch @supabase/ssr changelogs for workerd-specific fixes          |
+| No `wrangler rollback` command under incident pressure             | Devil's advocate | M          | M      | Document the rollback procedure (`wrangler versions list` + `wrangler versions deploy`) in a runbook before go-live; pin version tags with `--message` at deploy time for easier identification |
+| Wrangler version gap (^4.90.0 < 4.102.0)                           | Devil's advocate | M          | L      | Run `npm update wrangler` before first production deploy to resolve `^4.90.0` to latest; adds `--temporary` deploy and other AI-agent-friendly features                                         |
+| `wrangler.jsonc` / adapter / Cloudflare compat drift               | Unknown unknowns | M          | M      | Lock `@astrojs/cloudflare` and `wrangler` in CI; add a compatibility smoke test that exercises the `nodejs_compat` flag on `wrangler dev`                                                       |
+| Workers bundling fails on npm package with Node.js-only APIs       | Unknown unknowns | L          | M      | Run `wrangler deploy --dry-run` in CI before merging new dependencies; review `node:` usage in any new library before adoption                                                                  |
+| Session KV namespace lost after project rename or binding rotation | Unknown unknowns | L          | M      | Document the `SESSION` binding name; include it in the deployment checklist; test session persistence after any wrangler.jsonc change                                                           |
+| Free-tier daily request cap hit by traffic spike                   | Unknown unknowns | L          | M      | Upgrade to Paid plan ($5/mo) before any public launch or marketing event; set Cloudflare rate limiting rules to protect against bots consuming the free cap                                     |
+| Supabase migrations don't roll back with code rollback             | Pre-mortem       | M          | H      | Always write backward-compatible migrations (never `DROP COLUMN` without a code-driven migration window); maintain a 2-deploy compatibility window between schema change and code change        |
+| `@astrojs/cloudflare@^13.5.0` misses companion handlers (13.6.0+)  | Research finding | M          | L      | Run `npm update @astrojs/cloudflare` to resolve to 13.6.0+; companion handlers improve routing pipeline middleware integration                                                                  |
 
 ## Getting Started
 
 1. **Upgrade wrangler and adapter** before deploying:
+
    ```bash
    npm update wrangler @astrojs/cloudflare
    ```
+
    Ensures wrangler resolves to ≥4.102.0 (enables `--temporary` deploy) and the adapter resolves to ≥13.6.0 (companion handlers).
 
 2. **Set secrets in the Cloudflare dashboard** (Pages → Settings → Environment variables → Production):
    - `SUPABASE_URL` — your Supabase project URL
    - `SUPABASE_KEY` — your Supabase service role or anon key (server-only)
    - `OPENROUTER_API_KEY` — your OpenRouter API key
-   Set the same values for Preview if you want preview environments to be functional.
+     Set the same values for Preview if you want preview environments to be functional.
 
 3. **Build and deploy**:
+
    ```bash
    npm run build
    npx wrangler deploy
    ```
+
    The `astro build` step compiles to the Workers entrypoint defined in `wrangler.jsonc`. `wrangler deploy` uploads the bundle and returns a production URL.
 
 4. **Verify the deploy and tail logs**:
+
    ```bash
    npx wrangler tail --format pretty --status error
    ```
+
    Open the production URL, perform a login → generation → review flow, and confirm no errors appear in the tail. A clean run with no error-level log lines indicates a healthy first deploy.
 
 5. **Connect the Git repository to Cloudflare Pages** for automatic CI/CD: Cloudflare Dashboard → Workers & Pages → Create → Pages → Connect to Git → select `10xCards` → set build command `npm run build` and output directory `dist`. This wires every push to `master` into an automatic production deploy via the existing GitHub Actions pipeline (which already gates on lint + build).
@@ -152,6 +160,7 @@ The cumulative lesson: workerd is a powerful runtime, but it is not Node.js, and
 ## Out of Scope
 
 The following were not evaluated in this research:
+
 - Docker image configuration
 - CI/CD pipeline setup beyond what Cloudflare Pages Git integration provides
 - Production-scale architecture (multi-region, HA, DR)

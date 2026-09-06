@@ -4,6 +4,7 @@
 
 The project is already wired for Cloudflare (`@astrojs/cloudflare`, `wrangler.jsonc`, `nodejs_compat`), but
 several gaps exist before a production deploy is safe:
+
 - `wrangler` and `@astrojs/cloudflare` are pinned below the versions recommended by the infra doc
 - `OPENROUTER_API_KEY` is missing from `astro:env` schema and `.env.example`
 - No production deploy step exists in CI/CD
@@ -16,6 +17,7 @@ mitigation as concrete steps.
 ---
 
 ## Phase 0 — Prerequisites
+
 > Goal: Authenticate both CLIs and wire the local project to the remote Supabase project before
 > any code or deployment work begins. Nothing in Phase 1+ can be verified without this.
 
@@ -25,17 +27,21 @@ Both `wrangler` and the `supabase` CLI are already in `devDependencies` — no g
 Always invoke them via `npx`.
 
 - [x] **0-A.1** ⚙️ MANUAL — Authenticate wrangler with your Cloudflare account:
+
   ```bash
   npx wrangler login
   ```
+
   This opens a browser OAuth flow. After completing it, verify:
+
   ```bash
   npx wrangler whoami
   ```
+
   Expected output: your Cloudflare account email and account ID.
 
 - [x] **0-A.2** ⚠️ Note your **Cloudflare Account ID** from `wrangler whoami` output — you will
-  need it when connecting the repo to Cloudflare Pages (Phase 5.1).
+      need it when connecting the repo to Cloudflare Pages (Phase 5.1).
 
 ### 0-B — Supabase Project Setup
 
@@ -45,35 +51,42 @@ Always invoke them via `npx`.
   - Set a strong database password and **save it** — it cannot be recovered
 
 - [x] **0-B.2** ⚙️ MANUAL — Retrieve your project credentials
-  Project → Settings → API:
+      Project → Settings → API:
   - **Project URL** → this is `SUPABASE_URL`
   - **Project API keys → `anon` `public`** → this is `SUPABASE_KEY`
-  ⚠️ Use the **anon key**, not the service role key. The app uses `@supabase/ssr` with RLS — the
-  anon key is correct for SSR cookie-based auth. The service role key bypasses RLS entirely.
+    ⚠️ Use the **anon key**, not the service role key. The app uses `@supabase/ssr` with RLS — the
+    anon key is correct for SSR cookie-based auth. The service role key bypasses RLS entirely.
 
 - [x] **0-B.3** Authenticate the Supabase CLI:
+
   ```bash
   npx supabase login
   ```
+
   This opens a browser flow and stores a token locally.
 
 - [x] **0-B.4** Link the local project to your remote Supabase project:
+
   ```bash
   npx supabase link --project-ref <your-project-ref>
   ```
+
   The `project-ref` is the ID in your Supabase dashboard URL:
   `https://supabase.com/dashboard/project/<project-ref>`
   ⚠️ This also updates the local `supabase/config.toml` implicit link. The `project_id` field in
   `config.toml` is currently `"10x-astro-starter"` (scaffold default) — update it to match your
   real project name for clarity:
+
   ```toml
   project_id = "10xcards"
   ```
 
 - [x] **0-B.5** If the remote project already has schema applied, pull it to sync local state:
+
   ```bash
   npx supabase db pull
   ```
+
   If the remote is empty (fresh project), skip — migrations will be pushed in the next step.
 
 - [x] **0-B.6** Push any existing local migrations to the remote database:
@@ -87,12 +100,12 @@ Always invoke them via `npx`.
 ### 0-C — Supabase Auth Configuration (Production URL)
 
 - [x] **0-C.1** ⚙️ MANUAL — After the first Cloudflare deploy (Phase 4.2), update the Supabase
-  auth redirect settings with the production URL:
-  Supabase Dashboard → Authentication → URL Configuration:
+      auth redirect settings with the production URL:
+      Supabase Dashboard → Authentication → URL Configuration:
   - **Site URL**: `https://<your-worker>.workers.dev` (or custom domain)
   - **Additional redirect URLs**: add `https://<your-worker>.workers.dev/**`
-  ⚠️ Without this, sign-in and magic link emails will redirect back to `http://127.0.0.1:3000`
-  (the local dev URL in `supabase/config.toml`), breaking auth in production.
+    ⚠️ Without this, sign-in and magic link emails will redirect back to `http://127.0.0.1:3000`
+    (the local dev URL in `supabase/config.toml`), breaking auth in production.
 
 - [x] **0-C.2** Update `supabase/config.toml` `[auth]` section for local dev accuracy:
   ```toml
@@ -115,12 +128,15 @@ Always invoke them via `npx`.
 ---
 
 ## Phase 1 — Dependency & Config Hygiene
+
 > Goal: Resolve the version gaps that block agent-friendly features and companion handlers.
 
 - [x] **1.1** Update `wrangler` (→ ≥4.102.0) and `@astrojs/cloudflare` (→ ≥13.6.0):
+
   ```bash
   npm update wrangler @astrojs/cloudflare
   ```
+
   Verify resolved versions in `package-lock.json`.
 
 - [x] **1.2** Rename the worker in `wrangler.jsonc`:
@@ -131,6 +147,7 @@ Always invoke them via `npx`.
 ---
 
 ## Phase 2 — Workerd Local Verification
+
 > Goal: Catch Node.js vs workerd divergence locally before production.
 
 - [x] **2.1** Add a `dev:worker` script to `package.json`
@@ -140,9 +157,9 @@ Always invoke them via `npx`.
   - Sign in → confirm session cookie is set correctly via `Astro.cookies`
   - Access a protected route (`/dashboard`) — confirm middleware redirect works
   - Sign out → confirm session cookie is cleared
-  ⚠️ Edge case: If `@supabase/ssr` cookie handling fails under workerd, the fallback is to read
-  `requestHeaders.get("Cookie")` directly (already done in `src/lib/supabase.ts`) — check the
-  `parseCookieHeader` call works correctly with workerd's Header implementation.
+    ⚠️ Edge case: If `@supabase/ssr` cookie handling fails under workerd, the fallback is to read
+    `requestHeaders.get("Cookie")` directly (already done in `src/lib/supabase.ts`) — check the
+    `parseCookieHeader` call works correctly with workerd's Header implementation.
 
 - [x] **2.4** Run a Workers bundling dry-run to catch any Node.js-only package imports:
   ```bash
@@ -154,6 +171,7 @@ Always invoke them via `npx`.
 ---
 
 ## Phase 3 — Cloudflare Account Setup & Secrets (Manual Steps)
+
 > Goal: Provision the Cloudflare account and inject production secrets.
 
 - [x] **3.1** ⚙️ MANUAL — Start on the **Free plan**
@@ -164,6 +182,7 @@ Always invoke them via `npx`.
 ---
 
 ## Phase 4 — First Production Deploy & Verification
+
 > Goal: Confirm the worker deploys and the full auth+generation flow works in production.
 
 - [x] **4.1** Build and deploy — deployed to https://10xcards.adam-chudzynski.workers.dev
@@ -175,21 +194,22 @@ Always invoke them via `npx`.
 ---
 
 ## Phase 5 — Git-Integrated CI/CD via Cloudflare Workers Builds
+
 > Goal: Wire every `master` push to an automatic production deploy.
 > Note: Using Workers Builds (git integration on the Worker directly) instead of Cloudflare Pages —
 > simpler since the Worker was already deployed, same URL and secrets, no duplication.
 
 - [x] **5.1** ⚙️ MANUAL — Connect repo to Cloudflare Workers Builds:
-  Worker → Settings → Build → Connect to Git → select `achudzynski/10xCards` →
-  Build command: `npm run build`, Deploy command: `npx wrangler deploy`, Branch: `master`
+      Worker → Settings → Build → Connect to Git → select `achudzynski/10xCards` →
+      Build command: `npm run build`, Deploy command: `npx wrangler deploy`, Branch: `master`
 
 - [x] **5.2** ⚙️ MANUAL — Set environment variables in Workers Builds (Production):
   - `SUPABASE_URL`
   - `SUPABASE_KEY`
-  Mark all as **Encrypted** (secret).
+    Mark all as **Encrypted** (secret).
 
 - [ ] **5.3** ⚙️ MANUAL — Protect preview deployments (optional):
-  Zero Trust → Access → Applications → Add → Self-hosted → protect preview URLs
+      Zero Trust → Access → Applications → Add → Self-hosted → protect preview URLs
 
 - [x] **5.4** Add a `wrangler deploy --dry-run` step to the CI pipeline — done in `ci.yml`
 
@@ -198,6 +218,7 @@ Always invoke them via `npx`.
 ---
 
 ## Phase 6 — Rollback Runbook & Operational Docs
+
 > Goal: Ensure the team can recover from a bad deploy under pressure without scrambling.
 
 - [x] **6.1** Create `context/foundation/runbook.md` — done, all sections included
@@ -207,15 +228,15 @@ Always invoke them via `npx`.
 
 ## Edge Case Summary
 
-| Risk | Mitigation Step |
-|---|---|
-| Free plan 10ms CPU limit | Phase 3.1 — start Free; upgrade to Paid only on confirmed CPU timeout |
-| workerd ≠ Node.js cookie bugs | Phase 2.3 — auth smoke test under `wrangler dev` |
-| No `wrangler rollback` command | Phase 4.5 — rollback drill; Phase 6.1 — runbook |
-| Workers bundling fails on npm package | Phase 2.4 + 5.4 — dry-run in local and CI |
-| Worker rename creates orphaned resource | Phase 1.2 — warning + cutover note |
-| Workers vs Pages secret stores diverge | Phase 3.3 + 5.2 — set secrets in BOTH |
-| Preview URLs are public | Phase 5.3 — Cloudflare Access on `*.pages.dev` |
-| Supabase migration doesn't roll back | Phase 6.1 — 2-deploy compatibility window rule |
-| Session KV namespace lost on rename | Phase 6.1 — binding name documented in runbook |
-| Wrangler version gap < 4.102.0 | Phase 1.1 — `npm update wrangler` |
+| Risk                                    | Mitigation Step                                                       |
+| --------------------------------------- | --------------------------------------------------------------------- |
+| Free plan 10ms CPU limit                | Phase 3.1 — start Free; upgrade to Paid only on confirmed CPU timeout |
+| workerd ≠ Node.js cookie bugs           | Phase 2.3 — auth smoke test under `wrangler dev`                      |
+| No `wrangler rollback` command          | Phase 4.5 — rollback drill; Phase 6.1 — runbook                       |
+| Workers bundling fails on npm package   | Phase 2.4 + 5.4 — dry-run in local and CI                             |
+| Worker rename creates orphaned resource | Phase 1.2 — warning + cutover note                                    |
+| Workers vs Pages secret stores diverge  | Phase 3.3 + 5.2 — set secrets in BOTH                                 |
+| Preview URLs are public                 | Phase 5.3 — Cloudflare Access on `*.pages.dev`                        |
+| Supabase migration doesn't roll back    | Phase 6.1 — 2-deploy compatibility window rule                        |
+| Session KV namespace lost on rename     | Phase 6.1 — binding name documented in runbook                        |
+| Wrangler version gap < 4.102.0          | Phase 1.1 — `npm update wrangler`                                     |

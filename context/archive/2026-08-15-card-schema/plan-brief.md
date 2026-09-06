@@ -16,23 +16,25 @@ A `cards` table exists in the hosted Supabase project with RLS enabled, four per
 
 ## Key Decisions Made
 
-| Decision | Choice | Why (1 sentence) |
-| --- | --- | --- |
-| Track card origin | `is_ai_generated` boolean | Distinguishes AI-generated from manually created cards; boolean is simpler than an enum for a binary distinction. |
-| Gating flow state | No status column in DB | S-01's accept/edit/delete flow is transient — pending cards live in memory, not the database. |
-| Deletion strategy | Hard delete | PRD explicitly accepts history loss for MVP; avoids `deleted_at` filter complexity across every query. |
-| Service layer | None in F-01 | CRUD helpers added per-slice (S-01, S-02) to avoid premature abstraction. |
-| Error handling | N/A for F-01 | No service functions; error handling pattern decided per slice. |
-| TypeScript types | Single `Card` domain type | One type is sufficient for MVP; DB/domain split added only when they diverge. |
-| Migration workflow | Migration file + `supabase db push` | File lives in git; applied to hosted Supabase via CLI. |
+| Decision           | Choice                              | Why (1 sentence)                                                                                                  |
+| ------------------ | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Track card origin  | `is_ai_generated` boolean           | Distinguishes AI-generated from manually created cards; boolean is simpler than an enum for a binary distinction. |
+| Gating flow state  | No status column in DB              | S-01's accept/edit/delete flow is transient — pending cards live in memory, not the database.                     |
+| Deletion strategy  | Hard delete                         | PRD explicitly accepts history loss for MVP; avoids `deleted_at` filter complexity across every query.            |
+| Service layer      | None in F-01                        | CRUD helpers added per-slice (S-01, S-02) to avoid premature abstraction.                                         |
+| Error handling     | N/A for F-01                        | No service functions; error handling pattern decided per slice.                                                   |
+| TypeScript types   | Single `Card` domain type           | One type is sufficient for MVP; DB/domain split added only when they diverge.                                     |
+| Migration workflow | Migration file + `supabase db push` | File lives in git; applied to hosted Supabase via CLI.                                                            |
 
 ## Scope
 
 **In scope:**
+
 - `supabase/migrations/20260815000000_create_cards.sql` — table DDL, RLS enable, 4 policies, `updated_at` trigger
 - `src/types.ts` — `Card` interface
 
 **Out of scope:**
+
 - Service layer (`src/lib/services/cards.ts`) — deferred to S-01/S-02
 - Card API routes — deferred to S-01/S-02
 - SRS scheduling columns — deferred to S-03
@@ -45,10 +47,10 @@ Bottom-up: database migration first (single SQL file, self-contained, independen
 
 ## Phases at a Glance
 
-| Phase | What it delivers | Key risk |
-| --- | --- | --- |
-| 1. Database Migration | `cards` table + RLS + trigger in Supabase | RLS policies must be created after `ENABLE ROW LEVEL SECURITY` — order matters |
-| 2. TypeScript Types | `Card` interface in `src/types.ts` | Field naming (camelCase in type vs snake_case in DB) must be documented for service layer authors |
+| Phase                 | What it delivers                          | Key risk                                                                                          |
+| --------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| 1. Database Migration | `cards` table + RLS + trigger in Supabase | RLS policies must be created after `ENABLE ROW LEVEL SECURITY` — order matters                    |
+| 2. TypeScript Types   | `Card` interface in `src/types.ts`        | Field naming (camelCase in type vs snake_case in DB) must be documented for service layer authors |
 
 **Prerequisites:** Supabase project linked (`supabase/.temp/linked-project.json` exists ✓); `SUPABASE_URL` and `SUPABASE_KEY` available in environment for `supabase db push`.
 **Estimated effort:** ~1 session; both phases are mechanical once the schema is decided.

@@ -16,20 +16,21 @@ A signed-in user on `/deck` can click "Add card" to create one via a dialog, cli
 
 ## Key Decisions Made
 
-| Decision                          | Choice                                              | Why (1 sentence)                                                                 |
-| ---------------------------------- | ---------------------------------------------------- | --------------------------------------------------------------------------------- |
-| Create entry point                | "Add card" button opens a dialog                      | Keeps the page mostly static, matches the existing modal-like gating UX          |
-| Edit UX                           | Shared create/edit dialog                             | One component, consistent with the create dialog, matches GenerateWizard's pattern |
-| Delete confirmation               | AlertDialog before delete                             | Prevents accidental permanent data loss (hard delete, no undo)                    |
-| List update strategy              | Update from response, no full refetch                 | Instant feel without adding true pre-response optimistic rollback complexity      |
-| Deck list architecture            | Whole list becomes a React island (`DeckView`)        | Only way newly-created cards can appear without a page reload                     |
-| Not-found vs forbidden             | Always 404 `not_found`, never 403                     | Avoids leaking whether another user's card id exists                             |
-| Testing approach                  | Manual verification only                              | No test runner in the project yet; matches S-01 precedent                        |
-| Fallback priority if time is tight | None — create/edit/delete are all must-have           | All three are explicitly required by FR-008/010/011; roadmap frames this as smallest slice |
+| Decision                           | Choice                                         | Why (1 sentence)                                                                           |
+| ---------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| Create entry point                 | "Add card" button opens a dialog               | Keeps the page mostly static, matches the existing modal-like gating UX                    |
+| Edit UX                            | Shared create/edit dialog                      | One component, consistent with the create dialog, matches GenerateWizard's pattern         |
+| Delete confirmation                | AlertDialog before delete                      | Prevents accidental permanent data loss (hard delete, no undo)                             |
+| List update strategy               | Update from response, no full refetch          | Instant feel without adding true pre-response optimistic rollback complexity               |
+| Deck list architecture             | Whole list becomes a React island (`DeckView`) | Only way newly-created cards can appear without a page reload                              |
+| Not-found vs forbidden             | Always 404 `not_found`, never 403              | Avoids leaking whether another user's card id exists                                       |
+| Testing approach                   | Manual verification only                       | No test runner in the project yet; matches S-01 precedent                                  |
+| Fallback priority if time is tight | None — create/edit/delete are all must-have    | All three are explicitly required by FR-008/010/011; roadmap frames this as smallest slice |
 
 ## Scope
 
 **In scope:**
+
 - `PATCH`/`DELETE /api/cards/{id}` endpoints
 - `updateCard`/`deleteCard` service functions
 - `dialog` + `alert-dialog` shadcn primitives
@@ -37,6 +38,7 @@ A signed-in user on `/deck` can click "Add card" to create one via a dialog, cli
 - Wiring `deck.astro` to mount `DeckView` with server-fetched cards as initial props
 
 **Out of scope:**
+
 - SRS scheduling fields/logic (S-03)
 - A `GET /api/cards` refetch endpoint
 - Toast/undo mechanism
@@ -50,11 +52,11 @@ Same layered pattern as S-01: DB (RLS, `user_id` scoped) → Service (snake↔ca
 
 ## Phases at a Glance
 
-| Phase                              | What it delivers                                                        | Key risk                                                        |
-| ----------------------------------- | -------------------------------------------------------------------------| ------------------------------------------------------------------ |
-| 1. Service & API layer              | `updateCard`/`deleteCard` + `PATCH`/`DELETE /api/cards/{id}`             | Getting the "not found vs not owned → always 404" mapping right via `PGRST116` handling |
-| 2. shadcn UI primitives              | `dialog` + `alert-dialog` installed                                      | Low risk — CLI install, no custom logic                          |
-| 3. Deck React island                 | `DeckView`, `CardFormDialog`, `DeleteCardDialog`, wired into `deck.astro` | Keeping list state in sync with server responses without a refetch endpoint |
+| Phase                   | What it delivers                                                          | Key risk                                                                                |
+| ----------------------- | ------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| 1. Service & API layer  | `updateCard`/`deleteCard` + `PATCH`/`DELETE /api/cards/{id}`              | Getting the "not found vs not owned → always 404" mapping right via `PGRST116` handling |
+| 2. shadcn UI primitives | `dialog` + `alert-dialog` installed                                       | Low risk — CLI install, no custom logic                                                 |
+| 3. Deck React island    | `DeckView`, `CardFormDialog`, `DeleteCardDialog`, wired into `deck.astro` | Keeping list state in sync with server responses without a refetch endpoint             |
 
 **Prerequisites:** S-01 (done) — cards must exist to edit/delete.
 **Estimated effort:** ~1 session across 3 phases; smallest roadmap slice.

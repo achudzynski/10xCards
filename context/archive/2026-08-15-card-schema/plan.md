@@ -16,6 +16,7 @@ Create the `cards` database foundation: a Supabase migration that defines the `c
 ## Desired End State
 
 After this plan completes:
+
 - A timestamped migration file exists at `supabase/migrations/<timestamp>_create_cards.sql`.
 - Running `supabase db push` applies the migration to the hosted Supabase project without error.
 - The `cards` table exists in the `public` schema with RLS enabled and four per-operation policies that scope every row to `auth.uid() = user_id`.
@@ -63,6 +64,7 @@ Write and apply a single SQL migration file that creates the `cards` table, enab
 **Intent**: Create the `cards` table with all columns needed by S-01, S-02, and (structurally) S-03, enable RLS, and add per-operation policies that enforce per-user data isolation. This is the first migration in the project.
 
 **Contract**: The migration must define the following in order:
+
 1. A helper trigger function `set_updated_at()` that sets `NEW.updated_at = now()`.
 2. `CREATE TABLE public.cards` with columns: `id UUID PRIMARY KEY DEFAULT gen_random_uuid()`, `user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE`, `front TEXT NOT NULL`, `back TEXT NOT NULL`, `is_ai_generated BOOLEAN NOT NULL DEFAULT false`, `created_at TIMESTAMPTZ NOT NULL DEFAULT now()`, `updated_at TIMESTAMPTZ NOT NULL DEFAULT now()`.
 3. `ALTER TABLE public.cards ENABLE ROW LEVEL SECURITY`.

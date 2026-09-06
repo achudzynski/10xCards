@@ -29,7 +29,7 @@ deck becomes a spaced-repetition study tool that adapts to the user's own retent
 **S-01: first-gated-generation** — user pastes text, receives AI-generated cards, gates each
 one (accept / edit / delete), and accepted cards appear in their personal deck.
 
-> *Gwiazda przewodnia* — the smallest end-to-end flow that, if shipped first, proves the
+> _Gwiazda przewodnia_ — the smallest end-to-end flow that, if shipped first, proves the
 > core hypothesis of the product (that AI can generate flashcard-quality content from
 > user-supplied text). Placed as the first slice because every other capability — deck
 > management, spaced-repetition sessions — only matters once this works.
@@ -40,24 +40,24 @@ one (accept / edit / delete), and accepted cards appear in their personal deck.
 
 ## At a glance
 
-| ID   | Change ID               | Outcome (user can …)                                                                   | Prerequisites | PRD refs                                                          | Status   |
-|------|-------------------------|----------------------------------------------------------------------------------------|---------------|-------------------------------------------------------------------|----------|
-| F-01 | card-schema             | (foundation) cards table with RLS policies migrated to Supabase; client ready to persist card data | —             | FR-004, FR-009, NFR (data privacy, session durability)            | done |
-| S-01 | first-gated-generation  | paste text → AI-generated card list → gate each card → accepted cards in deck          | F-01          | US-01, FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-009 | done |
-| S-02 | deck-management         | create a card manually; edit and delete any saved card                                 | S-01          | FR-008, FR-010, FR-011                                            | in-progress |
-| S-03 | srs-review-session      | start a spaced-repetition review session, answer due cards, have schedule updated      | S-01, F-01    | US-02, FR-012, FR-013                                             | ready    |
-| S-04 | ui-improvements         | use a clear post-login dashboard and comfortably sized primary controls               | S-01          | NFR (usability)                                                   | ready    |
+| ID   | Change ID              | Outcome (user can …)                                                                               | Prerequisites | PRD refs                                                              | Status      |
+| ---- | ---------------------- | -------------------------------------------------------------------------------------------------- | ------------- | --------------------------------------------------------------------- | ----------- |
+| F-01 | card-schema            | (foundation) cards table with RLS policies migrated to Supabase; client ready to persist card data | —             | FR-004, FR-009, NFR (data privacy, session durability)                | done        |
+| S-01 | first-gated-generation | paste text → AI-generated card list → gate each card → accepted cards in deck                      | F-01          | US-01, FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-009 | done        |
+| S-02 | deck-management        | create a card manually; edit and delete any saved card                                             | S-01          | FR-008, FR-010, FR-011                                                | in-progress |
+| S-03 | srs-review-session     | start a spaced-repetition review session, answer due cards, have schedule updated                  | S-01, F-01    | US-02, FR-012, FR-013                                                 | ready       |
+| S-04 | ui-improvements        | use a clear post-login dashboard and comfortably sized primary controls                            | S-01          | NFR (usability)                                                       | ready       |
 
 ## Streams
 
 Navigation aid — groups items that share a Prerequisites chain. Canonical ordering still lives
 in the dependency graph below; this table is the proposed reading order across parallel tracks.
 
-| Stream | Theme           | Chain                         | Note                                                                                              |
-|--------|-----------------|-------------------------------|---------------------------------------------------------------------------------------------------|
-| A      | Creation loop   | `F-01` → `S-01` → `S-02`     | The minimum required sequence for speed-mode: schema → gated generation (north star) → full deck management. |
-| B      | Review loop     | `S-03`                        | Joins Stream A at `S-01`; OQ-3 resolved (SM-2) — ready to plan.                  |
-| C      | Product polish  | `S-04`                        | Runs in parallel with S-03; improves navigation and control usability without changing core flows. |
+| Stream | Theme          | Chain                    | Note                                                                                                         |
+| ------ | -------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| A      | Creation loop  | `F-01` → `S-01` → `S-02` | The minimum required sequence for speed-mode: schema → gated generation (north star) → full deck management. |
+| B      | Review loop    | `S-03`                   | Joins Stream A at `S-01`; OQ-3 resolved (SM-2) — ready to plan.                                              |
+| C      | Product polish | `S-04`                   | Runs in parallel with S-03; improves navigation and control usability without changing core flows.           |
 
 ## Baseline
 
@@ -140,13 +140,13 @@ Foundations below assume these are present and do NOT re-scaffold them.
 
 ## Backlog Handoff
 
-| Roadmap ID | Change ID              | Suggested issue title                                     | Ready for `/10x-plan` | Notes                                                     |
-|------------|------------------------|-----------------------------------------------------------|-----------------------|-----------------------------------------------------------|
-| F-01       | card-schema            | Set up cards table with Supabase migrations and RLS       | done                  | Archived — see Done log                                   |
-| S-01       | first-gated-generation | AI flashcard generation + gating flow (north star)        | done                  | Archived — see Done log                                   |
-| S-02       | deck-management        | Manual card creation, edit, and delete                    | yes                   | Requires S-01 (done); run `/10x-plan deck-management`     |
-| S-03       | srs-review-session     | Spaced-repetition review session                          | yes                   | SM-2 chosen for OQ-3 (2026-09-03); run `/10x-plan srs-review-session` |
-| S-04       | ui-improvements        | Post-login dashboard and larger primary controls           | yes                   | Runs in parallel with S-03; run `/10x-plan ui-improvements`       |
+| Roadmap ID | Change ID              | Suggested issue title                               | Ready for `/10x-plan` | Notes                                                                 |
+| ---------- | ---------------------- | --------------------------------------------------- | --------------------- | --------------------------------------------------------------------- |
+| F-01       | card-schema            | Set up cards table with Supabase migrations and RLS | done                  | Archived — see Done log                                               |
+| S-01       | first-gated-generation | AI flashcard generation + gating flow (north star)  | done                  | Archived — see Done log                                               |
+| S-02       | deck-management        | Manual card creation, edit, and delete              | yes                   | Requires S-01 (done); run `/10x-plan deck-management`                 |
+| S-03       | srs-review-session     | Spaced-repetition review session                    | yes                   | SM-2 chosen for OQ-3 (2026-09-03); run `/10x-plan srs-review-session` |
+| S-04       | ui-improvements        | Post-login dashboard and larger primary controls    | yes                   | Runs in parallel with S-03; run `/10x-plan ui-improvements`           |
 
 ## Open Roadmap Questions
 

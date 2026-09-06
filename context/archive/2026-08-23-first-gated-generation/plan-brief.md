@@ -26,26 +26,26 @@ an inline Retry; text with no extractable concepts shows a friendly empty-state.
 
 ## Key Decisions Made
 
-| Decision                    | Choice                                                                 | Why                                                              | Source   |
-| --------------------------- | --------------------------------------------------------------------- | --------------------------------------------------------------- | -------- |
-| AI provider/model           | OpenRouter, configurable model via optional env, low-cost default     | Key already wired; env override avoids code changes             | Research/Plan |
-| Text length cap             | ~5,000 chars, zod-enforced                                            | Balances cost/latency vs. useful input size                     | Plan     |
-| Cards per generation        | Up to ~10, no hard minimum                                            | Simple contract; accept whatever valid cards return             | Plan     |
-| Zero-card result            | Friendly empty-state, edit + retry                                    | Better UX than an error for legitimately thin text              | Plan     |
-| Request/latency handling    | Single non-streamed call, server timeout, inline error + Retry        | Simplest robust UX; preserves pasted text on failure            | Plan     |
-| Gating UX                   | Strict one-card-at-a-time wizard                                      | User's explicit choice; focused decisions                       | Plan     |
-| Gating state persistence    | In-memory React state only                                           | NFR durability targets review sessions (S-03), not generation   | Plan     |
-| Persistence timing          | Save each card on accept (`POST /api/cards`)                          | Matches wizard; no accepted work lost                           | Plan     |
-| Card validation             | front/back required, trimmed, 1–100 chars, zod server + UI mirror     | Consistent guardrails at boundary and UI                        | Plan     |
-| Deck view scope             | Minimal read-only Astro page; edit/delete deferred to S-02           | Satisfies FR-009 without scope creep                            | Plan     |
-| Testing                     | Manual only; keep a mock seam for dev                                | User opted out of tests this slice; seam derisks UI build       | Plan     |
+| Decision                 | Choice                                                            | Why                                                           | Source        |
+| ------------------------ | ----------------------------------------------------------------- | ------------------------------------------------------------- | ------------- |
+| AI provider/model        | OpenRouter, configurable model via optional env, low-cost default | Key already wired; env override avoids code changes           | Research/Plan |
+| Text length cap          | ~5,000 chars, zod-enforced                                        | Balances cost/latency vs. useful input size                   | Plan          |
+| Cards per generation     | Up to ~10, no hard minimum                                        | Simple contract; accept whatever valid cards return           | Plan          |
+| Zero-card result         | Friendly empty-state, edit + retry                                | Better UX than an error for legitimately thin text            | Plan          |
+| Request/latency handling | Single non-streamed call, server timeout, inline error + Retry    | Simplest robust UX; preserves pasted text on failure          | Plan          |
+| Gating UX                | Strict one-card-at-a-time wizard                                  | User's explicit choice; focused decisions                     | Plan          |
+| Gating state persistence | In-memory React state only                                        | NFR durability targets review sessions (S-03), not generation | Plan          |
+| Persistence timing       | Save each card on accept (`POST /api/cards`)                      | Matches wizard; no accepted work lost                         | Plan          |
+| Card validation          | front/back required, trimmed, 1–100 chars, zod server + UI mirror | Consistent guardrails at boundary and UI                      | Plan          |
+| Deck view scope          | Minimal read-only Astro page; edit/delete deferred to S-02        | Satisfies FR-009 without scope creep                          | Plan          |
+| Testing                  | Manual only; keep a mock seam for dev                             | User opted out of tests this slice; seam derisks UI build     | Plan          |
 
 ## Scope
 
 **In scope:** paste + generate (OpenRouter), one-at-a-time accept/edit/delete gating, save-on-accept
 persistence, read-only deck view, JSON error envelope + zod validation, route protection.
 
-**Out of scope:** manual card creation, editing/deleting *saved* cards (S-02), SRS/review (S-03),
+**Out of scope:** manual card creation, editing/deleting _saved_ cards (S-02), SRS/review (S-03),
 streaming, background jobs, model picker, automated tests, draft persistence, pagination.
 
 ## Architecture / Approach
@@ -58,13 +58,13 @@ RLS enforces per-user isolation; pasted text is never persisted or logged.
 
 ## Phases at a Glance
 
-| Phase                      | What it delivers                                              | Key risk                                            |
-| -------------------------- | ------------------------------------------------------------ | --------------------------------------------------- |
-| 1. Shared foundations      | zod, DTOs, error-envelope helper, `cards` service            | Getting the snake↔camel mapping contract right      |
-| 2. Generation backend      | OpenRouter service (mock seam) + `POST /api/generate`        | OpenRouter response reliability / structured output |
-| 3. Persistence backend     | `POST /api/cards` + route protection                         | Correct `user_id`/RLS handling                      |
-| 4. Gating UI               | `/generate` page + one-at-a-time wizard island               | First non-auth island; wizard state edge cases      |
-| 5. Deck view               | Read-only `/deck` page + nav links                           | Minimal — server-rendered list only                 |
+| Phase                  | What it delivers                                      | Key risk                                            |
+| ---------------------- | ----------------------------------------------------- | --------------------------------------------------- |
+| 1. Shared foundations  | zod, DTOs, error-envelope helper, `cards` service     | Getting the snake↔camel mapping contract right      |
+| 2. Generation backend  | OpenRouter service (mock seam) + `POST /api/generate` | OpenRouter response reliability / structured output |
+| 3. Persistence backend | `POST /api/cards` + route protection                  | Correct `user_id`/RLS handling                      |
+| 4. Gating UI           | `/generate` page + one-at-a-time wizard island        | First non-auth island; wizard state edge cases      |
+| 5. Deck view           | Read-only `/deck` page + nav links                    | Minimal — server-rendered list only                 |
 
 **Prerequisites:** F-01 `cards` schema (done); an `OPENROUTER_API_KEY` for real E2E (mock seam works
 without it).

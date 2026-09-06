@@ -53,7 +53,7 @@ and `npm run lint` / `npm run build` passing.
 
 ## What We're NOT Doing
 
-- No manual card creation, no edit/delete of *saved* cards (that is S-02 `deck-management`).
+- No manual card creation, no edit/delete of _saved_ cards (that is S-02 `deck-management`).
 - No SRS / review session / scheduling columns (S-03).
 - No streaming generation, no background jobs, no model picker in the UI.
 - No automated test framework (no Vitest/Playwright) — manual verification only this slice. A
@@ -74,7 +74,7 @@ wizard, so no accepted work is ever lost mid-session.
 - **API routes must set `prerender = false`** (project hard rule; SSR mode) and return the JSON error
   envelope `{ error: { code, message, context } }` — S-01 is the first route family to establish this
   JSON-error precedent, so add a small reusable helper rather than hand-rolling per route.
-- **Defense in depth on identity**: middleware guards the *pages*, but each API handler must
+- **Defense in depth on identity**: middleware guards the _pages_, but each API handler must
   independently re-check `context.locals.user` before touching `cards`, because the insert needs a
   trustworthy `user_id` and API routes can be called directly.
 - **OpenRouter timeout**: the fetch must use an `AbortController` timeout so a slow/hung provider
@@ -315,12 +315,12 @@ client island (e.g. `client:load`). No business logic in the Astro file.
 
 **Intent**: Drive the full flow in the browser with in-memory state.
 
-**Contract**: States — *input* (textarea, char counter to 5,000, Generate button, inline error +
-Retry on failure, pasted text preserved), *generating* (loading indicator), *reviewing* (strict
+**Contract**: States — _input_ (textarea, char counter to 5,000, Generate button, inline error +
+Retry on failure, pasted text preserved), _generating_ (loading indicator), _reviewing_ (strict
 one-card-at-a-time: show current card front/back with Accept / Edit / Delete-skip; Edit switches the
 card to editable inputs validated non-empty ≤ 100 chars mirroring the server rule; Accept calls
-`POST /api/cards` then advances; Delete advances without saving), *empty* (friendly "no cards —
-try a longer/more detailed passage" with a way back to input), *done* (summary count + link to
+`POST /api/cards` then advances; Delete advances without saving), _empty_ (friendly "no cards —
+try a longer/more detailed passage" with a way back to input), _done_ (summary count + link to
 `/deck`). Cards live in React state only; refresh discards un-saved. Use `cn()` for class merging;
 no `"use client"`/`"use server"` directives. Optionally extract a `useCardWizard` hook into
 `src/components/hooks/`.

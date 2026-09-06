@@ -1,0 +1,27 @@
+
+> 10x-astro-starter@0.0.1 lint
+> eslint .
+
+`astro-eslint-parser` does not support the `projectService` option, it will parse it as `project: true` instead.
+`astro-eslint-parser` does not support the `projectService` option, it will parse it as `project: true` instead.
+`astro-eslint-parser` does not support the `projectService` option, it will parse it as `project: true` instead.
+`astro-eslint-parser` does not support the `projectService` option, it will parse it as `project: true` instead.
+`astro-eslint-parser` does not support the `projectService` option, it will parse it as `project: true` instead.
+`astro-eslint-parser` does not support the `projectService` option, it will parse it as `project: true` instead.
+`astro-eslint-parser` does not support the `projectService` option, it will parse it as `project: true` instead.
+`astro-eslint-parser` does not support the `projectService` option, it will parse it as `project: true` instead.
+`astro-eslint-parser` does not support the `projectService` option, it will parse it as `project: true` instead.
+`astro-eslint-parser` does not support the `projectService` option, it will parse it as `project: true` instead.
+`astro-eslint-parser` does not support the `projectService` option, it will parse it as `project: true` instead.
+`astro-eslint-parser` does not support the `projectService` option, it will parse it as `project: true` instead.
+
+C:\Users\AACHUDZYNSKI\source\repos\10xCards\src\components\deck\CardFormDialog.tsx
+  193:68  error  Returning a void expression from an arrow function shorthand is forbidden. Please add braces to the arrow function  @typescript-eslint/no-confusing-void-expression
+
+C:\Users\AACHUDZYNSKI\source\repos\10xCards\src\components\deck\DeleteCardDialog.tsx
+   1:10  error  'useState' is defined but never used. Allowed unused vars must match /^_/u                        @typescript-eslint/no-unused-vars
+  50:9   error  This expression unnecessarily compares a boolean value to a boolean instead of using it directly  @typescript-eslint/no-unnecessary-boolean-literal-compare
+
+✖ 3 problems (3 errors, 0 warnings)
+  2 errors and 0 warnings potentially fixable with the `--fix` option.
+

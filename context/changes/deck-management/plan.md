@@ -17,6 +17,7 @@ Extend the deck view so a user can create a flashcard manually, edit any saved c
 ## Desired End State
 
 A user on `/deck` can:
+
 - Click "Add card", fill in front/back in a dialog, and see the new card appear at the top of the list immediately on success.
 - Click "Edit" on any card, change front/back in the same dialog component (pre-filled), and see the card update in place on success.
 - Click "Delete" on any card, confirm in an alert dialog, and see the card removed from the list on success.
@@ -73,6 +74,7 @@ Add `updateCard`/`deleteCard` to the service layer and a new `PATCH`/`DELETE /ap
 **Intent**: Add `updateCard` and `deleteCard`, following the existing `createCard`/`listCards` shape — same `mapRow` reuse, same "throw on unexpected Supabase error" behavior, but returning a sentinel for "not found or not owned" so the route can map it to 404 without a separate existence check (avoids the ID-leak tradeoff already decided against).
 
 **Contract**:
+
 - `updateCard(supabase, userId, cardId, input: UpdateCardRequest): Promise<Card | null>` — issues `.from("cards").update({...}).eq("id", cardId).eq("user_id", userId).select(...).single()`. Supabase's `.single()` raises a `PGRST116` ("no rows") error when the `id`+`user_id` filter matches nothing (wrong owner or nonexistent id); catch that specific code and return `null` instead of rethrowing. Any other error still rethrows.
 - `deleteCard(supabase, userId, cardId): Promise<boolean>` — issues `.from("cards").delete().eq("id", cardId).eq("user_id", userId).select("id")` (the `.select()` after `.delete()` returns the deleted rows so the result is inspectable). Returns `true` if one row came back, `false` if zero (not found or not owned).
 
@@ -83,6 +85,7 @@ Add `updateCard`/`deleteCard` to the service layer and a new `PATCH`/`DELETE /ap
 **Intent**: Handle `PATCH` (partial update) and `DELETE` for a single card, reusing the exact auth/validation/envelope pattern from `src/pages/api/cards.ts`.
 
 **Contract**:
+
 - `export const prerender = false;`
 - Both handlers: 401 `unauthorized` if no `context.locals.user`; 500 `server_misconfigured` if `createClient()` returns null; validate `context.params.id` with `z.string().uuid()` → 400 `invalid_input` on failure (malformed id can never match a row, but validating up front avoids a wasted DB round-trip and gives a clearer error).
 - `PATCH`: body schema `z.object({ front: z.string().trim().min(1).max(100).optional(), back: z.string().trim().min(1).max(100).optional() }).refine((v) => v.front !== undefined || v.back !== undefined, { message: "At least one of front or back must be provided" })`. On `updateCard` returning `null` → 404 `not_found`, message "Card not found". On success → `jsonOk({ card }, 200)`. On unexpected service error → 500 `save_failed`.
@@ -260,9 +263,9 @@ No schema changes — reuses the existing `cards` table as-is.
 
 #### Automated
 
-- [ ] 3.1 Type checking passes: `npx astro check`
-- [ ] 3.2 Linting passes: `npm run lint`
-- [ ] 3.3 Build succeeds: `npm run build`
+- [x] 3.1 Type checking passes: `npx astro check`
+- [x] 3.2 Linting passes: `npm run lint`
+- [x] 3.3 Build succeeds: `npm run build`
 
 #### Manual
 
