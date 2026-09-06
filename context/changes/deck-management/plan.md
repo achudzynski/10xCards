@@ -249,12 +249,12 @@ No schema changes — reuses the existing `cards` table as-is.
 
 #### Automated
 
-- [x] 2.1 Linting passes: `npm run lint`
-- [x] 2.2 Build succeeds: `npm run build`
+- [x] 2.1 Linting passes: `npm run lint` — 4605190
+- [x] 2.2 Build succeeds: `npm run build` — 4605190
 
 #### Manual
 
-- [x] 2.3 dialog.tsx and alert-dialog.tsx exist and export the standard shadcn API
+- [x] 2.3 dialog.tsx and alert-dialog.tsx exist and export the standard shadcn API — 4605190
 
 ### Phase 3: Deck React island (create, edit, delete UI)
 
