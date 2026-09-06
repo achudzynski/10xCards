@@ -235,26 +235,26 @@ No schema changes — reuses the existing `cards` table as-is.
 
 #### Automated
 
-- [x] 1.1 Type checking passes: `npm run astro check`
-- [x] 1.2 Linting passes: `npm run lint`
+- [x] 1.1 Type checking passes: `npm run astro check` — d622738
+- [x] 1.2 Linting passes: `npm run lint` — d622738
 
 #### Manual
 
-- [x] 1.3 PATCH with valid id updates only the given field(s) and returns the updated card
-- [x] 1.4 PATCH/DELETE with another user's or nonexistent card id returns 404 not_found
-- [x] 1.5 PATCH with an empty body returns 400 invalid_input
-- [x] 1.6 DELETE on an owned card removes the row (verified via deck reload)
+- [x] 1.3 PATCH with valid id updates only the given field(s) and returns the updated card — d622738
+- [x] 1.4 PATCH/DELETE with another user's or nonexistent card id returns 404 not_found — d622738
+- [x] 1.5 PATCH with an empty body returns 400 invalid_input — d622738
+- [x] 1.6 DELETE on an owned card removes the row (verified via deck reload) — d622738
 
 ### Phase 2: shadcn UI primitives
 
 #### Automated
 
-- [ ] 2.1 Linting passes: `npm run lint`
-- [ ] 2.2 Build succeeds: `npm run build`
+- [x] 2.1 Linting passes: `npm run lint`
+- [x] 2.2 Build succeeds: `npm run build`
 
 #### Manual
 
-- [ ] 2.3 dialog.tsx and alert-dialog.tsx exist and export the standard shadcn API
+- [x] 2.3 dialog.tsx and alert-dialog.tsx exist and export the standard shadcn API
 
 ### Phase 3: Deck React island (create, edit, delete UI)
 
