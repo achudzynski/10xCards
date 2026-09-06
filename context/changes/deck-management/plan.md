@@ -263,15 +263,15 @@ No schema changes — reuses the existing `cards` table as-is.
 
 #### Automated
 
-- [x] 3.1 Type checking passes: `npx astro check`
-- [x] 3.2 Linting passes: `npm run lint`
-- [x] 3.3 Build succeeds: `npm run build`
+- [x] 3.1 Type checking passes: `npx astro check` — 5f77c9e
+- [x] 3.2 Linting passes: `npm run lint` — 5f77c9e
+- [x] 3.3 Build succeeds: `npm run build` — 5f77c9e
 
 #### Manual
 
-- [ ] 3.4 Existing cards render via the new island, visually consistent with prior rendering
-- [ ] 3.5 Add card appears immediately and persists after refresh
-- [ ] 3.6 Edit updates in place immediately and persists after refresh
-- [ ] 3.7 Delete confirmation dialog works; confirm removes and persists, cancel leaves untouched
-- [ ] 3.8 Empty front/back shows inline validation error, no API call made
-- [ ] 3.9 In-flight requests show disabled/loading state, no double-submit
+- [x] 3.4 Existing cards render via the new island, visually consistent with prior rendering — 5f77c9e
+- [x] 3.5 Add card appears immediately and persists after refresh — 5f77c9e
+- [x] 3.6 Edit updates in place immediately and persists after refresh — 5f77c9e
+- [x] 3.7 Delete confirmation dialog works; confirm removes and persists, cancel leaves untouched — 5f77c9e
+- [x] 3.8 Empty front/back shows inline validation error, no API call made — 5f77c9e
+- [x] 3.9 In-flight requests show disabled/loading state, no double-submit — 5f77c9e
