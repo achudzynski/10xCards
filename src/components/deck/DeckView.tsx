@@ -33,18 +33,17 @@ export default function DeckView({ initialCards }: DeckViewProps) {
   }
 
   function handleFormSaved(card: Card) {
-    const existingIndex = cards.findIndex((c) => c.id === card.id);
-    if (existingIndex >= 0) {
-      // Edit: replace in place
-      setCards((prev) => {
+    setCards((prev) => {
+      const existingIndex = prev.findIndex((c) => c.id === card.id);
+      if (existingIndex >= 0) {
+        // Edit: replace in place
         const updated = [...prev];
         updated[existingIndex] = card;
         return updated;
-      });
-    } else {
+      }
       // Create: prepend to list
-      setCards((prev) => [card, ...prev]);
-    }
+      return [card, ...prev];
+    });
     setDialogState("closed");
   }
 

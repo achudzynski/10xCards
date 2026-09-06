@@ -2,7 +2,6 @@ import { useReducer } from "react";
 import { Loader2 } from "lucide-react";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -100,14 +99,14 @@ export default function DeleteCardDialog({ open, onOpenChange, card, onDeleted }
         </AlertDialogHeader>
         <div className="flex gap-3">
           <AlertDialogCancel disabled={state.isDeleting}>Cancel</AlertDialogCancel>
-          <AlertDialogAction
+          <button
             onClick={handleConfirm}
             disabled={state.isDeleting}
-            className="bg-destructive hover:bg-destructive/90"
+            className="border-input bg-destructive ring-offset-background hover:bg-destructive/90 focus-visible:ring-ring inline-flex h-10 items-center justify-center rounded-md border px-4 py-2 text-sm font-medium text-white transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
           >
             {state.isDeleting ? <Loader2 className="mr-2 size-4 animate-spin" /> : null}
             Delete
-          </AlertDialogAction>
+          </button>
         </div>
       </AlertDialogContent>
     </AlertDialog>

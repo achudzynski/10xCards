@@ -9,6 +9,7 @@ export const prerender = false;
 const createCardSchema = z.object({
   front: z.string().trim().min(1).max(100),
   back: z.string().trim().min(1).max(100),
+  isAiGenerated: z.boolean().optional().default(false),
 });
 
 export const POST: APIRoute = async (context) => {
@@ -42,7 +43,7 @@ export const POST: APIRoute = async (context) => {
     const card = await createCard(supabase, context.locals.user.id, {
       front: parsed.data.front,
       back: parsed.data.back,
-      isAiGenerated: true,
+      isAiGenerated: parsed.data.isAiGenerated,
     });
     return jsonOk({ card }, 201);
   } catch {
