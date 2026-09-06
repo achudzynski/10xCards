@@ -27,6 +27,11 @@ export interface CreateCardRequest {
   isAiGenerated?: boolean;
 }
 
+export interface UpdateCardRequest {
+  front?: string;
+  back?: string;
+}
+
 export interface ApiError {
   error: {
     code: string;

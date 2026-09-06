@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Card, CreateCardRequest } from "@/types";
+import type { Card, CreateCardRequest, UpdateCardRequest } from "@/types";
 
 interface CardRow {
   id: string;
@@ -52,4 +52,40 @@ export async function listCards(supabase: SupabaseClient, userId: string): Promi
     throw error;
   }
   return (data as CardRow[]).map(mapRow);
+}
+
+export async function updateCard(
+  supabase: SupabaseClient,
+  userId: string,
+  cardId: string,
+  input: UpdateCardRequest,
+): Promise<Card | null> {
+  const { data, error } = await supabase
+    .from("cards")
+    .update({
+      ...(input.front !== undefined ? { front: input.front } : {}),
+      ...(input.back !== undefined ? { back: input.back } : {}),
+    })
+    .eq("id", cardId)
+    .eq("user_id", userId)
+    .select("id, user_id, front, back, is_ai_generated, created_at, updated_at")
+    .single();
+
+  if (error) {
+    // PGRST116: no rows matched the id + user_id filter — card doesn't exist or isn't owned by this user.
+    if (error.code === "PGRST116") {
+      return null;
+    }
+    throw error;
+  }
+  return mapRow(data);
+}
+
+export async function deleteCard(supabase: SupabaseClient, userId: string, cardId: string): Promise<boolean> {
+  const { data, error } = await supabase.from("cards").delete().eq("id", cardId).eq("user_id", userId).select("id");
+
+  if (error) {
+    throw error;
+  }
+  return data.length > 0;
 }
