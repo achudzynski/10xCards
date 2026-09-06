@@ -1,7 +1,7 @@
 ---
 change_id: deck-management
 title: Manual card creation, editing, and deletion
-status: implemented
+status: impl_reviewed
 created: 2026-09-06
 updated: 2026-09-06
 archived_at: null
