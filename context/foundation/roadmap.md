@@ -44,7 +44,7 @@ one (accept / edit / delete), and accepted cards appear in their personal deck.
 |------|-------------------------|----------------------------------------------------------------------------------------|---------------|-------------------------------------------------------------------|----------|
 | F-01 | card-schema             | (foundation) cards table with RLS policies migrated to Supabase; client ready to persist card data | —             | FR-004, FR-009, NFR (data privacy, session durability)            | done |
 | S-01 | first-gated-generation  | paste text → AI-generated card list → gate each card → accepted cards in deck          | F-01          | US-01, FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-009 | done |
-| S-02 | deck-management         | create a card manually; edit and delete any saved card                                 | S-01          | FR-008, FR-010, FR-011                                            | proposed |
+| S-02 | deck-management         | create a card manually; edit and delete any saved card                                 | S-01          | FR-008, FR-010, FR-011                                            | in-progress |
 | S-03 | srs-review-session      | start a spaced-repetition review session, answer due cards, have schedule updated      | S-01, F-01    | US-02, FR-012, FR-013                                             | ready    |
 | S-04 | ui-improvements         | use a clear post-login dashboard and comfortably sized primary controls               | S-01          | NFR (usability)                                                   | ready    |
 
@@ -112,7 +112,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Smallest slice; sequenced after S-01 because manual card management only matters once a deck exists. Editing a card that has an SRS schedule (FR-010) creates an edge case — the PRD resolution states the schedule survives content changes; important to confirm this behaviour before implementation to avoid later migration.
-- **Status:** proposed
+- **Status:** in-progress
 
 ### S-03: srs-review-session
 
