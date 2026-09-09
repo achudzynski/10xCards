@@ -1,12 +1,12 @@
 # UI Improvements (S-04) Implementation Plan
 
-## Executive Summary
+## Overview
 
 Improve the authenticated landing experience by turning `/dashboard` from a small centered status card into a clear post-login hub with larger, easier-to-discover primary controls. Keep the change isolated to dashboard and auth-surface controls, preserve the current responsive layout patterns, and avoid touching generation, deck-management, or SRS review-session logic.
 
-The codebase already lands authenticated users on `/dashboard`, uses Astro SSR shells with Tailwind utility classes, and has both raw anchor/button markup and reusable shadcn `Button`/`Card` primitives available. The implementation should reuse those primitives where possible, define a “large primary control” treatment only for dashboard/auth entry controls, and leave generation/deck/review interaction components unchanged.
+The codebase already lands authenticated users on `/dashboard`, uses Astro SSR shells with Tailwind utility classes, and has both raw anchor/button markup and reusable shadcn `Button`/`Card` primitives available. The implementation should reuse those primitives where possible, define a "large primary control" treatment only for dashboard/auth entry controls, and leave generation/deck/review interaction components unchanged.
 
-## Research-Backed Current State
+## Current State Analysis
 
 ### Post-login landing and route protection
 
@@ -49,284 +49,168 @@ The codebase already lands authenticated users on `/dashboard`, uses Astro SSR s
 - Deck page has its own page-level CTA sizing and interactive controls: `src/pages/deck.astro:22-49`, `src/components/deck/DeckView.tsx:81-144`.
 - Per `context/foundation/lessons.md:5-10`, installed shadcn primitives should be reused instead of hand-rolled equivalents.
 
-## Technical Approach
+## Desired End State
 
-### 1. Dashboard structure
+After sign-in, users land on `/dashboard` and see a clear landing hub — not a small placeholder status card — with large, easy-to-spot primary controls for "Generate cards" and "My deck", and a visually secondary but still easy-to-operate sign-out control. The layout remains fully responsive (mobile stacked → desktop grid), and the generation, deck-management, and SRS review-session workflows are functionally and visually untouched.
 
-Rework `/dashboard` into a clearer landing page that still uses Astro SSR and remains visually aligned with the cosmic authenticated surfaces already used elsewhere.
+Verification: sign in, land on `/dashboard`, confirm the new layout at mobile/tablet/desktop widths, navigate to `/generate` and `/deck` and confirm both pages are unchanged, sign out and confirm it still works, then run `npm run lint` and `npm run build`.
 
-Planned structure:
+### Key Discoveries:
 
-1. **Header / welcome block**
-   - Keep personalized welcome using `Astro.locals.user`.
-   - Expand descriptive copy so the page reads like a landing hub, not an auth placeholder.
+- `/dashboard` is already the authenticated landing page and reads `Astro.locals.user` directly: `src/pages/dashboard.astro:4-41`. All three controls (Generate, Deck, Sign out) currently use small raw Tailwind classes (`px-4 py-2 text-sm`): `src/pages/dashboard.astro:17-38`.
+- The reusable shadcn `Button` primitive already has a `size="lg"` variant (`h-10 px-6`) and supports `asChild`: `src/components/ui/button.tsx:7-50`. This is sufficient for the "large primary control" requirement — no new button variant/size token is needed.
+- `Card` primitives exist and can structure the new dashboard layout: `src/components/ui/card.tsx:5-56`.
+- Existing responsive conventions to reuse: outer padding `p-4` → `sm:p-8`, centered max-width containers (`max-w-sm` / `max-w-2xl` / `max-w-4xl`), and `flex-col sm:flex-row` / `sm:grid-cols-3` patterns already used in `src/components/Welcome.astro:27-57`.
+- Per `context/foundation/lessons.md:5-10`, installed shadcn primitives must be reused instead of hand-rolled equivalents.
+- `s-03` (srs-review-session) owns `src/pages/api/review/*`, `src/pages/review/*`, review components, and card-table migration columns — none of these exist yet, so there is no review destination to link to safely.
 
-2. **Primary action area**
-   - Promote the two live destinations already in scope:
-     - Generate cards
-     - My deck
-   - Present them as large, highly discoverable CTAs with enough tap/click area.
-   - Use a stacked mobile layout and side-by-side layout at larger breakpoints.
+## What We're NOT Doing
 
-3. **Secondary account area**
-   - Keep sign-out visible, but visually secondary to task-starting actions.
-   - Consider including a lightweight “account/actions” card or footer row rather than mixing sign-out with primary task CTAs.
+- Not modifying `GenerateWizard.tsx` accept/edit/skip/generate buttons or any generation workflow sizing: `src/components/generate/GenerateWizard.tsx:147-315`.
+- Not modifying `DeckView.tsx` CRUD buttons or `src/pages/deck.astro` page shell: `src/components/deck/DeckView.tsx:81-144`, `src/pages/deck.astro:22-49`.
+- Not touching `src/pages/api/review/*`, `src/pages/review/*`, review-session components, or `supabase/migrations/*` — these belong to `s-03` and do not exist yet.
+- Not adding a review-session CTA or placeholder on the dashboard — no real route exists yet to link to, and speculative UI risks colliding with `s-03`'s eventual contract.
+- Not introducing a new `buttonVariants` size token — `size="lg"` already covers the "large primary control" requirement.
+- Not changing global typography, spacing tokens, or `global.css`.
+- Not changing API routes, services, or middleware behavior.
 
-4. **Review area placeholder strategy**
-   - Because `s-03` owns review-session UI/routes, do not add SRS-specific workflow logic here.
-   - If roadmap alignment requires dashboard acknowledgment of review, limit this to a non-functional placeholder/info block only if a real target already exists by implementation time; otherwise omit it to avoid overlap.
+## Implementation Approach
 
-### 2. Control sizing
+Rework `/dashboard` (`src/pages/dashboard.astro`) into three visual sections, using only existing shadcn primitives and existing responsive conventions:
 
-Define “primary controls” narrowly so the change improves discoverability without globally resizing workflow buttons.
+1. **Header / welcome block** — keep the personalized welcome from `Astro.locals.user`, with expanded copy so the page reads as a landing hub.
+2. **Primary action area** — "Generate cards" and "My deck" rendered as `Button size="lg" asChild` links, stacked full-width on mobile and side-by-side (`sm:flex-row` or a 2-column grid) from `sm:` breakpoint up.
+3. **Secondary account area** — sign-out kept large enough to operate comfortably but styled with an `outline`/`ghost` variant so it reads as secondary to the two primary CTAs, placed in its own row/card beneath the primary action area.
 
-Primary controls in scope:
+Auth-surface consistency: review `SubmitButton` (`src/components/auth/SubmitButton.tsx:11-30`) once the dashboard CTA sizing is final. Because `SubmitButton` already renders a prominent full-width CTA, it is expected to already read as comparable in prominence to the new dashboard buttons — update it only if a side-by-side visual check during Phase 3 shows a material mismatch. `src/pages/auth/signin.astro` layout and `FormField` sizing stay untouched regardless.
 
-- dashboard CTA to `/generate`
-- dashboard CTA to `/deck`
-- dashboard sign-out control
-- sign-in primary submit button and auth entry links only if needed for consistency in the post-login/auth handoff
-- topbar auth links only if discoverability review shows they are materially too small; otherwise leave topbar untouched to minimize surface area
+Isolation: `src/pages/dashboard.astro` remains the sole composition root. Add `src/components/dashboard/DashboardActions.astro` only if the page becomes unwieldy as a single file — this is an implementation-time judgment call, not a required deliverable.
 
-Controls explicitly out of scope:
+## Phase 1: Dashboard layout and CTA upsizing
 
-- `GenerateWizard` accept/edit/skip/generate buttons
-- deck CRUD buttons in `DeckView`
-- dialog buttons
-- any future review-session controls
+### Overview
 
-Implementation strategy:
+Replace the small centered dashboard card with a three-section landing hub (welcome, primary actions, secondary account area) using shadcn `Button`/`Card` primitives at `size="lg"`.
 
-- Prefer using `Button` with `size="lg"` and `asChild` for dashboard navigation links, rather than repeating raw anchor class strings.
-- If `size="lg"` is still not prominent enough, add a dashboard-local class override or extend `buttonVariants` with a new size token only if it can remain semantically scoped and won’t force downstream consumers to change.
-- Keep sign-out visibly large enough for usability, but stylistically secondary (outline/ghost or subdued filled treatment).
-- Preserve existing layout integrity by increasing control height/padding before increasing text size too aggressively.
+### Changes Required:
 
-### 3. Responsive strategy
+#### 1. Dashboard page
 
-Use existing project patterns instead of inventing a new breakpoint system.
+**File**: `src/pages/dashboard.astro`
 
-- **Mobile**
-  - Single-column layout
-  - Full-width or near-full-width primary controls
-  - Generous vertical spacing between sections
-- **Tablet**
-  - Promote CTAs into a 2-column grid or `sm:flex-row` arrangement if widths remain comfortable
-  - Maintain readable spacing around welcome text and action cards
-- **Desktop**
-  - Keep content centered within a moderate max width (`max-w-2xl` to `max-w-4xl`, to be chosen during implementation based on visual fit)
-  - Use grid/card presentation for primary actions rather than stretching a narrow centered card
+**Intent**: Restructure the authenticated landing page into a welcome block, a primary CTA group (Generate, Deck), and a visually secondary sign-out area, replacing the current single small centered card and its `px-4 py-2 text-sm` links.
 
-Guardrails:
+**Contract**: Page continues to read `Astro.locals.user` and render for authenticated users only (no change to route protection, which stays in `src/middleware.ts`). Generate/Deck links use `Button` with `size="lg"` and `asChild` wrapping an `<a>`; layout is `flex-col` on mobile and `sm:flex-row` (or `sm:grid-cols-2`) from the `sm:` breakpoint up, matching the pattern in `src/components/Welcome.astro:27-57`. Sign-out remains a form posting to the existing sign-out action, styled with an `outline`/`ghost` `Button` variant, placed below/beside the primary CTA group as a visually secondary element.
 
-- Do not reduce current minimum page padding (`p-4`) on small screens.
-- Avoid fixed heights that could clip longer labels or future copy.
-- Avoid global typography or spacing changes in `global.css`.
+#### 2. Optional dashboard sub-component
 
-### 4. Shared components and isolation strategy
+**File**: `src/components/dashboard/DashboardActions.astro` (new, only if needed)
 
-Keep the implementation isolated to dashboard/auth surfaces and avoid refactoring business-flow components.
+**Intent**: Extract the primary-action + sign-out markup from `dashboard.astro` if inlining it makes the page file unwieldy.
 
-Preferred component boundaries:
+**Contract**: Presentational only — receives no new data beyond what `dashboard.astro` already has; introduces no new routes, props from generate/deck/review components, or business logic.
 
-- `src/pages/dashboard.astro` remains the composition root.
-- Optionally add a small presentational component such as `src/components/dashboard/DashboardActions.astro` or `...tsx` only if the page becomes unwieldy; do not refactor generate/deck/review components into it.
-- Reuse:
-  - `Button` from `src/components/ui/button.tsx`
-  - `Card` primitives from `src/components/ui/card.tsx`
-  - existing cosmic utility/background patterns from current pages
+### Success Criteria:
 
-Do **not**:
+#### Automated Verification:
 
-- modify `GenerateWizard.tsx` for shared sizing
-- modify `DeckView.tsx` sizing rules
-- change API routes, services, migrations, or middleware behavior
-- introduce review-session-specific routes or controls from `s-03`
+- Lint passes: `npm run lint`
+- Build succeeds: `npm run build`
 
-### 5. Auth surface consistency
+#### Manual Verification:
 
-The outcome mentions dashboard and authentication controls. Because sign-in already redirects to `/dashboard`, the auth surface should only be adjusted where it directly affects discoverability/operability of the handoff.
+- Sign in and confirm redirect to `/dashboard` still works.
+- `/dashboard` shows the new three-section layout with a personalized welcome.
+- Primary controls (Generate, Deck) are visibly larger than the previous `px-4 py-2 text-sm` treatment at mobile, tablet, and desktop widths.
+- Dashboard → `/generate` and dashboard → `/deck` navigation both work.
+- Sign-out still works from the dashboard and is visually secondary to the primary CTAs.
+- `/generate` and `/deck` pages are visually and functionally unchanged when entered via the new dashboard.
 
-Likely scope:
+---
 
-- Keep `src/pages/auth/signin.astro` layout intact.
-- Update `SubmitButton` sizing only if it is materially smaller than the new dashboard primary CTAs, while preserving the existing full-width pattern.
-- Leave field sizing alone unless button changes create visual imbalance.
-- Consider matching sign-up/sign-in text links’ spacing/visibility without redesigning the auth page.
+## Phase 2: Auth control harmonization check
 
-## Files Expected to Change
+### Overview
 
-### Primary touch targets
+Verify whether the sign-in primary submit control reads as comparably prominent to the new dashboard CTAs, and adjust only if a real mismatch is found.
 
-- `src/pages/dashboard.astro` — main layout and CTA restructuring
-- `src/components/ui/button.tsx` — only if a new reusable large button size/token is required
-- `src/components/auth/SubmitButton.tsx` — only if auth primary CTA should be brought into the same sizing treatment
+### Changes Required:
 
-### Possible helper/component additions
+#### 1. Auth submit button
 
-- `src/components/dashboard/*` — only if extracting presentational dashboard sections improves clarity without widening scope
+**File**: `src/components/auth/SubmitButton.tsx`
 
-### Files expected **not** to change
+**Intent**: Bring the sign-in primary CTA visually in line with the new dashboard `size="lg"` controls, only if a side-by-side comparison during this phase shows the current full-width custom-class treatment is materially smaller/less prominent.
 
-- `src/pages/generate.astro`
-- `src/components/generate/GenerateWizard.tsx`
-- `src/pages/deck.astro`
-- `src/components/deck/*`
-- `src/pages/api/review/*`
-- `src/pages/review/*`
-- review-session components
-- `supabase/migrations/*`
+**Contract**: If changed, `SubmitButton` keeps its existing full-width pattern and loading-state behavior (`src/components/auth/SubmitButton.tsx:11-30`); only size/padding classes are adjusted. `src/pages/auth/signin.astro` layout and `FormField` sizing are not touched.
 
-## Overlap / Conflict Check with s-03 (srs-review-session)
+### Success Criteria:
 
-Known `s-03` areas:
+#### Automated Verification:
 
-- `src/pages/api/review/*`
-- `src/pages/review/*`
-- review session components
-- card table migrations
+- Lint passes: `npm run lint`
+- Build succeeds: `npm run build`
 
-Conflict assessment:
+#### Manual Verification:
 
-- **No direct overlap** if `s-04` stays limited to dashboard/auth presentation.
-- Potential soft overlap only if `/dashboard` adds a CTA to a future review page; this should be handled as a plain link only after confirming the route exists, not by building any review UI here.
-- Avoid touching shared card data structures, migrations, and review-page components to preserve parallel work.
+- Sign-in flow still posts to `/api/auth/signin` and redirects to `/dashboard` on success.
+- Auth card layout remains stable and does not overflow at narrow (mobile) widths.
+- Sign-in submit loading/disabled state still renders correctly.
 
-## Phase Breakdown
+---
 
-### Phase 1 — Confirm dashboard IA and visual scope
+## Phase 3: Verification
 
-Deliverables:
+### Overview
 
-- Final dashboard content map:
-  - welcome block
-  - primary CTA group
-  - secondary account/sign-out area
-- decision on whether auth submit sizing changes are included
-- decision on whether `Button` variant extension is necessary or page-local classes suffice
+Final regression pass confirming no unintended effects on generation, deck-management, or SRS review-session scope.
 
-Success criteria:
+### Changes Required:
 
-- Scope remains isolated to dashboard/auth controls
-- No dependency introduced on review-session work
+No file changes in this phase — verification only.
 
-### Phase 2 — Implement dashboard layout and CTA upsizing
+### Success Criteria:
 
-Deliverables:
+#### Automated Verification:
 
-- Replace the small centered dashboard card with a clearer dashboard composition
-- Convert dashboard action links to larger controls using shared primitives where feasible
-- Make sign-out easier to discover and operate without competing with the main task CTAs
+- Lint passes: `npm run lint`
+- Build succeeds: `npm run build`
 
-Success criteria:
+#### Manual Verification:
 
-- `/dashboard` still SSR-renders correctly for authenticated users
-- primary controls are visibly larger than current `px-4 py-2 text-sm` treatment
-- layout remains usable from mobile through desktop
+- Full responsive walkthrough of `/dashboard` at mobile, tablet, and desktop widths.
+- Generation workflow (`/generate`, `GenerateWizard`) confirmed visually/functionally unchanged.
+- Deck workflow (`/deck`, `DeckView`) confirmed visually/functionally unchanged.
+- No files under `src/pages/api/review/*`, `src/pages/review/*`, or `supabase/migrations/*` were touched.
 
-### Phase 3 — Optional auth control harmonization
+---
 
-Deliverables:
+## Testing Strategy
 
-- Update `SubmitButton` and/or auth page control spacing only if needed for consistency with the new dashboard treatment
-
-Success criteria:
-
-- sign-in flow still posts to `/api/auth/signin`
-- auth card layout remains stable at small widths
-- no regression to validation/loading states in `SignInForm`
-
-### Phase 4 — Verification
-
-Deliverables:
-
-- targeted lint/build validation
-- manual responsive walkthrough
-- regression check on dashboard → generate/deck navigation
-
-Success criteria:
-
-- lint passes
-- build passes
-- manual checks confirm no unintended workflow regressions
-
-## Testing Focus
-
-### Automated validation
-
-Run the smallest existing checks that cover the touched UI:
-
-- `npm run lint`
-- `npm run build`
-
-Rationale:
-
-- There is no dedicated test runner in the repo.
-- Build validation is important because Astro SSR pages and component imports can fail at compile time even for visual-only changes.
-
-### Manual verification checklist
+### Manual Testing Steps:
 
 1. Sign in and confirm successful redirect to `/dashboard`.
 2. Verify `/dashboard` shows the new structure and personalized welcome state.
-3. Verify primary dashboard controls are easy to spot and operate on:
-   - mobile width
-   - tablet width
-   - desktop width
-4. Confirm CTA navigation still works:
-   - dashboard → `/generate`
-   - dashboard → `/deck`
+3. Verify primary dashboard controls are easy to spot and operate at mobile, tablet, and desktop widths.
+4. Confirm CTA navigation still works: dashboard → `/generate`, dashboard → `/deck`.
 5. Confirm sign-out still works from the dashboard.
 6. Confirm generation workflow remains visually/functionally unchanged after entering via dashboard.
 7. Confirm deck workflow remains visually/functionally unchanged after entering via dashboard.
-8. If auth controls were resized, verify:
-   - sign-in submit loading state still renders correctly
-   - auth card does not overflow at narrow widths
+8. If auth controls were resized in Phase 2, verify sign-in submit loading state still renders correctly and the auth card does not overflow at narrow widths.
 
-## Success Criteria
+## Performance Considerations
 
-- After sign-in, users land on a dashboard that reads as a real landing hub rather than a placeholder status card.
-- Dashboard primary actions are materially larger and easier to discover/activate than the current small buttons.
-- Responsive behavior is preserved across mobile, tablet, and desktop.
-- No unintended UI or behavior changes occur in generation or deck-management workflows.
-- No `s-03` review-session codepaths, routes, or migrations are touched.
-- Lint and build succeed.
+None — this is a presentation-only change using existing components; no new network calls, data fetching, or bundle-affecting dependencies are introduced.
 
-## Risks & Unknowns
+## Migration Notes
 
-### Risks
+Not applicable — no data model, schema, or migration changes are part of this plan.
 
-1. **Visual regression on small screens**
-   - Larger controls may wrap or crowd the glass-card layout if the dashboard remains too narrow.
-   - Mitigation: widen the dashboard container and use stacked mobile layout first.
+## References
 
-2. **Shared button regression**
-   - Extending `buttonVariants` could unintentionally affect deck/generation surfaces if existing sizes are altered instead of extended.
-   - Mitigation: add new size tokens or page-local overrides; never change existing `default`/`sm`/`lg` semantics in place.
-
-3. **Inconsistent auth/dashboard affordances**
-   - If dashboard controls are enlarged but sign-in submit remains comparatively small, the end-to-end experience may feel uneven.
-   - Mitigation: explicitly review auth submit during implementation and harmonize only if justified.
-
-4. **Accidental scope creep into review workflow**
-   - Adding a “review” CTA could drift into `s-03` if the route/component contract is not yet settled.
-   - Mitigation: keep `s-04` limited to dashboard shell and generic control sizing; no SRS-specific UI construction.
-
-### Unknowns
-
-1. Whether `Button size="lg"` is sufficient or a dashboard-specific larger treatment is needed.
-2. Whether sign-out should remain a standalone form button or move into a secondary card/action row for better hierarchy.
-3. Whether a review destination exists by implementation time and can be safely linked without colliding with `s-03`.
-
-## Historical Context
-
-- `context/archive/2026-08-23-first-gated-generation/research.md` confirms:
-  - `/dashboard` is the existing protected landing page precedent
-  - middleware-based protection already covers `/dashboard`, `/generate`, and `/deck`
-- `context/archive/2026-09-06-deck-management/plan.md` shows deck CRUD was intentionally isolated to `/deck` and React deck components, supporting the decision to keep `s-04` out of deck internals.
-- `context/foundation/lessons.md` reinforces reuse of installed shadcn primitives rather than hand-rolled equivalent UI.
-
-## Key Code References
-
+- Historical context: `context/archive/2026-08-23-first-gated-generation/research.md` (confirms `/dashboard` as the existing protected landing page precedent; middleware-based protection already covers `/dashboard`, `/generate`, and `/deck`)
+- Historical context: `context/archive/2026-09-06-deck-management/plan.md` (deck CRUD intentionally isolated to `/deck` and React deck components, supporting keeping `s-04` out of deck internals)
+- `context/foundation/lessons.md` — reuse installed shadcn primitives rather than hand-rolled equivalents
 - `src/pages/dashboard.astro:7-38` — current post-login card and undersized CTAs
 - `src/pages/auth/signin.astro:8-22` — sign-in shell and handoff context
 - `src/components/auth/SignInForm.tsx:45-88` — auth primary submit usage
@@ -338,3 +222,50 @@ Rationale:
 - `src/pages/deck.astro:22-49` — deck page shell to avoid affecting
 - `src/components/deck/DeckView.tsx:81-144` — deck interactive controls to leave untouched
 - `src/components/generate/GenerateWizard.tsx:246-312` — generation workflow buttons to leave untouched
+
+## Progress
+
+> Convention: `- [ ]` pending, `- [x]` done. Append ` — <commit sha>` when a step lands. Do not rename step titles. See `references/progress-format.md`.
+
+### Phase 1: Dashboard layout and CTA upsizing
+
+#### Automated
+
+- [x] 1.1 Lint passes: `npm run lint`
+- [x] 1.2 Build succeeds: `npm run build`
+
+#### Manual
+
+- [x] 1.3 Sign in and confirm redirect to `/dashboard` still works
+- [x] 1.4 `/dashboard` shows the new three-section layout with a personalized welcome
+- [x] 1.5 Primary controls (Generate, Deck) are visibly larger than the previous treatment at mobile, tablet, and desktop widths
+- [x] 1.6 Dashboard → `/generate` and dashboard → `/deck` navigation both work
+- [x] 1.7 Sign-out still works from the dashboard and is visually secondary to the primary CTAs
+- [x] 1.8 `/generate` and `/deck` pages are visually and functionally unchanged when entered via the new dashboard
+
+### Phase 2: Auth control harmonization check
+
+#### Automated
+
+- [ ] 2.1 Lint passes: `npm run lint`
+- [ ] 2.2 Build succeeds: `npm run build`
+
+#### Manual
+
+- [ ] 2.3 Sign-in flow still posts to `/api/auth/signin` and redirects to `/dashboard` on success
+- [ ] 2.4 Auth card layout remains stable and does not overflow at narrow (mobile) widths
+- [ ] 2.5 Sign-in submit loading/disabled state still renders correctly
+
+### Phase 3: Verification
+
+#### Automated
+
+- [ ] 3.1 Lint passes: `npm run lint`
+- [ ] 3.2 Build succeeds: `npm run build`
+
+#### Manual
+
+- [ ] 3.3 Full responsive walkthrough of `/dashboard` at mobile, tablet, and desktop widths
+- [ ] 3.4 Generation workflow (`/generate`, `GenerateWizard`) confirmed visually/functionally unchanged
+- [ ] 3.5 Deck workflow (`/deck`, `DeckView`) confirmed visually/functionally unchanged
+- [ ] 3.6 No files under `src/pages/api/review/*`, `src/pages/review/*`, or `supabase/migrations/*` were touched
