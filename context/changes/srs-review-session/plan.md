@@ -403,26 +403,26 @@ All pre-existing cards default to `due_date = now()` on migration, so the first 
 
 #### Automated
 
-- [x] 1.1 Migration applies cleanly against local Supabase
-- [x] 1.2 Type checking passes (npm run build)
-- [x] 1.3 Linting passes (npm run lint)
+- [x] 1.1 Migration applies cleanly against local Supabase — d274b34
+- [x] 1.2 Type checking passes (npm run build) — d274b34
+- [x] 1.3 Linting passes (npm run lint) — d274b34
 
 #### Manual
 
-- [x] 1.4 Existing rows show initialized SRS defaults after migration
-- [x] 1.5 Second active review_sessions row per user fails on unique index
+- [x] 1.4 Existing rows show initialized SRS defaults after migration — d274b34
+- [x] 1.5 Second active review_sessions row per user fails on unique index — d274b34
 
 ### Phase 2: Review services
 
 #### Automated
 
-- [ ] 2.1 Linting passes (npm run lint)
-- [ ] 2.2 Build/type-check passes (npm run build)
+- [x] 2.1 Linting passes (npm run lint)
+- [x] 2.2 Build/type-check passes (npm run build)
 
 #### Manual
 
-- [ ] 2.3 Low rating (1) resets repetitions and sets due_date +1 day
-- [ ] 2.4 High rating (5) with repetitions >= 2 grows interval via ease factor
+- [x] 2.3 Low rating (1) resets repetitions and sets due_date +1 day
+- [x] 2.4 High rating (5) with repetitions >= 2 grows interval via ease factor
 
 ### Phase 3: Review API
 
