@@ -461,10 +461,10 @@ All pre-existing cards default to `due_date = now()` on migration, so the first 
 
 #### Manual
 
-- [x] 5.3 Start with due cards and complete a session — 097d865
-- [x] 5.4 Refresh mid-session and resume correctly — 097d865
-- [x] 5.5 Submit each rating 0-5 at least once across test cards — 097d865
-- [x] 5.6 No-due-cards state — 097d865
-- [x] 5.7 Second tab / stale submit conflict returns session_state_invalid — 097d865
-- [x] 5.8 Unauthorized access to /review redirects to signin — 097d865
-- [x] 5.9 Cross-account RLS check: another user cannot read/manipulate your session or card schedule — 097d865
+- [x] 5.3 Start with due cards and complete a session — 1eea94c
+- [x] 5.4 Refresh mid-session and resume correctly — 1eea94c
+- [x] 5.5 Submit each rating 0-5 at least once across test cards — 1eea94c
+- [x] 5.6 No-due-cards state — 1eea94c
+- [x] 5.7 Second tab / stale submit conflict returns session_state_invalid — 1eea94c
+- [x] 5.8 Unauthorized access to /review redirects to signin — 1eea94c
+- [x] 5.9 Cross-account RLS check: another user cannot read/manipulate your session or card schedule — 1eea94c
