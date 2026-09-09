@@ -231,30 +231,30 @@ Not applicable — no data model, schema, or migration changes are part of this 
 
 #### Automated
 
-- [x] 1.1 Lint passes: `npm run lint`
-- [x] 1.2 Build succeeds: `npm run build`
+- [x] 1.1 Lint passes: `npm run lint` — 946d6b6
+- [x] 1.2 Build succeeds: `npm run build` — 946d6b6
 
 #### Manual
 
-- [x] 1.3 Sign in and confirm redirect to `/dashboard` still works
-- [x] 1.4 `/dashboard` shows the new three-section layout with a personalized welcome
-- [x] 1.5 Primary controls (Generate, Deck) are visibly larger than the previous treatment at mobile, tablet, and desktop widths
-- [x] 1.6 Dashboard → `/generate` and dashboard → `/deck` navigation both work
-- [x] 1.7 Sign-out still works from the dashboard and is visually secondary to the primary CTAs
-- [x] 1.8 `/generate` and `/deck` pages are visually and functionally unchanged when entered via the new dashboard
+- [x] 1.3 Sign in and confirm redirect to `/dashboard` still works — 946d6b6
+- [x] 1.4 `/dashboard` shows the new three-section layout with a personalized welcome — 946d6b6
+- [x] 1.5 Primary controls (Generate, Deck) are visibly larger than the previous treatment at mobile, tablet, and desktop widths — 946d6b6
+- [x] 1.6 Dashboard → `/generate` and dashboard → `/deck` navigation both work — 946d6b6
+- [x] 1.7 Sign-out still works from the dashboard and is visually secondary to the primary CTAs — 946d6b6
+- [x] 1.8 `/generate` and `/deck` pages are visually and functionally unchanged when entered via the new dashboard — 946d6b6
 
 ### Phase 2: Auth control harmonization check
 
 #### Automated
 
-- [ ] 2.1 Lint passes: `npm run lint`
-- [ ] 2.2 Build succeeds: `npm run build`
+- [x] 2.1 Lint passes: `npm run lint`
+- [x] 2.2 Build succeeds: `npm run build`
 
 #### Manual
 
-- [ ] 2.3 Sign-in flow still posts to `/api/auth/signin` and redirects to `/dashboard` on success
-- [ ] 2.4 Auth card layout remains stable and does not overflow at narrow (mobile) widths
-- [ ] 2.5 Sign-in submit loading/disabled state still renders correctly
+- [x] 2.3 Sign-in flow still posts to `/api/auth/signin` and redirects to `/dashboard` on success
+- [x] 2.4 Auth card layout remains stable and does not overflow at narrow (mobile) widths
+- [x] 2.5 Sign-in submit loading/disabled state still renders correctly
 
 ### Phase 3: Verification
 
