@@ -416,26 +416,26 @@ All pre-existing cards default to `due_date = now()` on migration, so the first 
 
 #### Automated
 
-- [x] 2.1 Linting passes (npm run lint)
-- [x] 2.2 Build/type-check passes (npm run build)
+- [x] 2.1 Linting passes (npm run lint) — e674928
+- [x] 2.2 Build/type-check passes (npm run build) — e674928
 
 #### Manual
 
-- [x] 2.3 Low rating (1) resets repetitions and sets due_date +1 day
-- [x] 2.4 High rating (5) with repetitions >= 2 grows interval via ease factor
+- [x] 2.3 Low rating (1) resets repetitions and sets due_date +1 day — e674928
+- [x] 2.4 High rating (5) with repetitions >= 2 grows interval via ease factor — e674928
 
 ### Phase 3: Review API
 
 #### Automated
 
-- [ ] 3.1 Linting passes (npm run lint)
-- [ ] 3.2 Build/type-check passes (npm run build)
+- [x] 3.1 Linting passes (npm run lint)
+- [x] 3.2 Build/type-check passes (npm run build)
 
 #### Manual
 
-- [ ] 3.3 REST round-trip: start session, current, answer all work end-to-end
-- [ ] 3.4 Submitting non-current cardId returns session_state_invalid (409)
-- [ ] 3.5 Unauthenticated requests to all three endpoints return 401
+- [x] 3.3 REST round-trip: start session, current, answer all work end-to-end
+- [x] 3.4 Submitting non-current cardId returns session_state_invalid (409)
+- [x] 3.5 Unauthenticated requests to all three endpoints return 401
 
 ### Phase 4: Review UI
 
