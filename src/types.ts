@@ -39,3 +39,66 @@ export interface ApiError {
     context?: unknown;
   };
 }
+
+export interface CardWithSRS extends Card {
+  easeFactor: number;
+  interval: number;
+  repetitions: number;
+  dueDate: string;
+}
+
+export interface ReviewCard {
+  id: string;
+  front: string;
+  back: string;
+  dueDate: string;
+}
+
+export interface ReviewSession {
+  id: string;
+  status: "active" | "completed";
+  currentIndex: number;
+  answeredCount: number;
+  totalCount: number;
+  cardOrder: string[];
+  createdAt: string;
+  updatedAt: string;
+  completedAt: string | null;
+}
+
+export type ReviewRating = 0 | 1 | 2 | 3 | 4 | 5;
+
+export interface CardAnswer {
+  sessionId: string;
+  cardId: string;
+  rating: ReviewRating;
+}
+
+export interface ReviewResult {
+  cardId: string;
+  rating: ReviewRating;
+  previousEaseFactor: number;
+  previousInterval: number;
+  previousRepetitions: number;
+  nextEaseFactor: number;
+  nextInterval: number;
+  nextRepetitions: number;
+  nextDueDate: string;
+}
+
+export interface StartReviewSessionResponse {
+  session: ReviewSession | null;
+  currentCard: ReviewCard | null;
+  summary: { totalDue: number };
+}
+
+export interface CurrentReviewSnapshotResponse {
+  session: ReviewSession | null;
+  currentCard: ReviewCard | null;
+}
+
+export interface SubmitReviewAnswerResponse {
+  session: ReviewSession;
+  result: ReviewResult;
+  nextCard: ReviewCard | null;
+}
