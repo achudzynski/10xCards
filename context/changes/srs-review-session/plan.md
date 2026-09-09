@@ -428,29 +428,29 @@ All pre-existing cards default to `due_date = now()` on migration, so the first 
 
 #### Automated
 
-- [x] 3.1 Linting passes (npm run lint)
-- [x] 3.2 Build/type-check passes (npm run build)
+- [x] 3.1 Linting passes (npm run lint) — f667c64
+- [x] 3.2 Build/type-check passes (npm run build) — f667c64
 
 #### Manual
 
-- [x] 3.3 REST round-trip: start session, current, answer all work end-to-end
-- [x] 3.4 Submitting non-current cardId returns session_state_invalid (409)
-- [x] 3.5 Unauthenticated requests to all three endpoints return 401
+- [x] 3.3 REST round-trip: start session, current, answer all work end-to-end — f667c64
+- [x] 3.4 Submitting non-current cardId returns session_state_invalid (409) — f667c64
+- [x] 3.5 Unauthenticated requests to all three endpoints return 401 — f667c64
 
 ### Phase 4: Review UI
 
 #### Automated
 
-- [ ] 4.1 Linting passes (npm run lint)
-- [ ] 4.2 Build passes (npm run build)
+- [x] 4.1 Linting passes (npm run lint)
+- [x] 4.2 Build passes (npm run build)
 
 #### Manual
 
-- [ ] 4.3 End-to-end: complete a full review session from /review through completion state
-- [ ] 4.4 Refresh mid-session resumes at the same card with correct progress
-- [ ] 4.5 Unauthenticated visit to /review redirects to signin
-- [ ] 4.6 No-due-cards state renders distinctly from error state
-- [ ] 4.7 Rating buttons disabled during in-flight submission (no double-submit)
+- [x] 4.3 End-to-end: complete a full review session from /review through completion state
+- [x] 4.4 Refresh mid-session resumes at the same card with correct progress
+- [x] 4.5 Unauthenticated visit to /review redirects to signin
+- [x] 4.6 No-due-cards state renders distinctly from error state
+- [x] 4.7 Rating buttons disabled during in-flight submission (no double-submit)
 
 ### Phase 5: Verification and polish
 
