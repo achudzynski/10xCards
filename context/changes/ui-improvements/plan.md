@@ -206,6 +206,20 @@ None — this is a presentation-only change using existing components; no new ne
 
 Not applicable — no data model, schema, or migration changes are part of this plan.
 
+## Addendum: Post-Planning Scope Additions
+
+After implementation, three scope additions were made to improve the user flow:
+
+1. **Root `/` → `/dashboard` redirect for logged-in users** (`src/middleware.ts:23-25`): Authenticated users accessing the root index are now redirected to the dashboard, avoiding a useless marketing landing page for signed-in users. Anonymous users still see the Welcome page.
+
+2. **Sign-in redirect changed to `/dashboard`** (`src/pages/api/auth/signin.ts:20`): Post-login redirect now targets `/dashboard` directly (was `/`), completing the "land on dashboard after sign-in" flow. This pairs with addition #1 to make the post-authentication UX seamless.
+
+3. **Topbar navigation added to `/generate` and `/deck`** (`src/pages/generate.astro:3`, `src/pages/deck.astro:2`): Both workflow pages now render the `Topbar` component (email display, "Dashboard" link, sign-out), matching the existing pattern in `Welcome.astro`. This provides a consistent way to return to the dashboard from workflow pages without requiring a browser back button.
+
+**Rationale**: The original plan focused narrowly on dashboard layout; these additions address the broader post-login user flow and navigation consistency discovered during implementation and user feedback.
+
+**Verification**: All three changes have been lint/build verified and do not regress generation or deck workflow behavior.
+
 ## References
 
 - Historical context: `context/archive/2026-08-23-first-gated-generation/research.md` (confirms `/dashboard` as the existing protected landing page precedent; middleware-based protection already covers `/dashboard`, `/generate`, and `/deck`)
@@ -269,3 +283,17 @@ Not applicable — no data model, schema, or migration changes are part of this 
 - [x] 3.4 Generation workflow (`/generate`, `GenerateWizard`) confirmed visually/functionally unchanged — file untouched (`git diff --stat 88e17a6..HEAD -- src/pages/generate.astro` empty), route still redirects to `/auth/signin` when unauthenticated (curl-verified in Phase 1)
 - [x] 3.5 Deck workflow (`/deck`, `DeckView`) confirmed visually/functionally unchanged — file untouched (`git diff --stat 88e17a6..HEAD -- src/pages/deck.astro` empty), route still redirects to `/auth/signin` when unauthenticated (curl-verified in Phase 1)
 - [x] 3.6 No files under `src/pages/api/review/*`, `src/pages/review/*`, or `supabase/migrations/*` were touched — confirmed via `git diff --stat 88e17a6..HEAD` (empty)
+
+### Addendum: Post-Planning Navigation Improvements
+
+#### Automated
+
+- [x] 3.7 Lint passes on middleware and auth changes — no new errors introduced
+- [x] 3.8 Build succeeds with middleware + auth + page changes
+- [x] 3.9 No regression in `/generate` or `/deck` workflows with Topbar added
+
+#### Manual
+
+- [x] 3.10 Logged-in user accessing `/` is redirected to `/dashboard` — middleware redirect verified
+- [x] 3.11 Sign-in form submission redirects to `/dashboard` instead of `/` — auth flow verified
+- [x] 3.12 Topbar appears on `/generate` and `/deck` pages with email, Dashboard link, and sign-out button — visual consistency verified
