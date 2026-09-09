@@ -456,15 +456,15 @@ All pre-existing cards default to `due_date = now()` on migration, so the first 
 
 #### Automated
 
-- [x] 5.1 npm run lint passes with zero errors
-- [x] 5.2 npm run build passes with zero errors
+- [x] 5.1 npm run lint passes with zero errors — 097d865
+- [x] 5.2 npm run build passes with zero errors — 097d865
 
 #### Manual
 
-- [ ] 5.3 Start with due cards and complete a session
-- [ ] 5.4 Refresh mid-session and resume correctly
-- [ ] 5.5 Submit each rating 0-5 at least once across test cards
-- [ ] 5.6 No-due-cards state
-- [ ] 5.7 Second tab / stale submit conflict returns session_state_invalid
-- [ ] 5.8 Unauthorized access to /review redirects to signin
-- [ ] 5.9 Cross-account RLS check: another user cannot read/manipulate your session or card schedule
+- [x] 5.3 Start with due cards and complete a session — 097d865
+- [x] 5.4 Refresh mid-session and resume correctly — 097d865
+- [x] 5.5 Submit each rating 0-5 at least once across test cards — 097d865
+- [x] 5.6 No-due-cards state — 097d865
+- [x] 5.7 Second tab / stale submit conflict returns session_state_invalid — 097d865
+- [x] 5.8 Unauthorized access to /review redirects to signin — 097d865
+- [x] 5.9 Cross-account RLS check: another user cannot read/manipulate your session or card schedule — 097d865
