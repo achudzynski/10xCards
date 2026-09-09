@@ -456,8 +456,8 @@ All pre-existing cards default to `due_date = now()` on migration, so the first 
 
 #### Automated
 
-- [ ] 5.1 npm run lint passes with zero errors
-- [ ] 5.2 npm run build passes with zero errors
+- [x] 5.1 npm run lint passes with zero errors
+- [x] 5.2 npm run build passes with zero errors
 
 #### Manual
 
