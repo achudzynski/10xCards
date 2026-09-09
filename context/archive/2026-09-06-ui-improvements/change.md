@@ -1,10 +1,10 @@
 ---
 change_id: ui-improvements
 title: Post-login dashboard and larger primary controls
-status: impl_reviewed
+status: archived
 created: 2026-09-06
-updated: 2026-09-09
-archived_at: null
+updated: 2026-09-10
+archived_at: 2026-09-10T00:26:36Z
 ---
 
 ## Notes
