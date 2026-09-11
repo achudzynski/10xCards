@@ -124,7 +124,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** The SM-2 answer schema (0–5 self-rating) drives the review UI and requires new SRS-specific columns (`ease_factor`, `interval`, `repetitions`, `due_date`) on the card table. NFR (session progress must survive browser refresh) adds state-persistence complexity — review session state must be durable, not in-memory.
-- **Status:** ready
+- **Status:** done
 
 ### S-04: ui-improvements
 
@@ -172,3 +172,4 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **F-01: (foundation) cards table migrated to Supabase with RLS policies that scope all card data strictly to the authenticated user; the Supabase client can create, read, update, and delete card rows.** — Archived 2026-09-03 → `context/archive/2026-08-15-card-schema/`. Lesson: —.
 - **S-02: user can create a card manually (front and back), edit any saved card in their deck, and delete any saved card from their deck.** — Archived 2026-09-06 → `context/archive/2026-09-06-deck-management/`. Lesson: —.
 - **S-04: after signing in, the user lands on the dashboard, and primary dashboard and authentication controls are large enough to be easy to discover and operate.** — Archived 2026-09-10 → `context/archive/2026-09-06-ui-improvements/`. Lesson: —.
+- **S-03: user can start a spaced-repetition review session, see each card due for review and answer it per the SRS answer schema, and have each card's next review date updated according to the chosen SRS algorithm.** — Archived 2026-09-09 → `context/archive/2026-09-06-srs-review-session/`. Lesson: —.
