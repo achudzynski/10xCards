@@ -1,11 +1,13 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import Topbar from "@/components/Topbar.astro";
 import GenerateWizard from "@/components/generate/GenerateWizard";
 ---
 
 <Layout title="Generate cards">
   <div class="bg-cosmic min-h-screen p-4 py-12">
     <div class="mx-auto max-w-2xl">
+      <Topbar />
       <GenerateWizard client:load />
     </div>
   </div>

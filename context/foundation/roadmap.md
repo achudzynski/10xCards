@@ -3,7 +3,7 @@ project: "10xCards"
 version: 1
 status: draft
 created: 2026-08-15
-updated: 2026-09-09
+updated: 2026-09-10
 prd_version: 1
 main_goal: speed
 top_blocker: time
@@ -45,8 +45,8 @@ one (accept / edit / delete), and accepted cards appear in their personal deck.
 | F-01 | card-schema            | (foundation) cards table with RLS policies migrated to Supabase; client ready to persist card data | —             | FR-004, FR-009, NFR (data privacy, session durability)                | done        |
 | S-01 | first-gated-generation | paste text → AI-generated card list → gate each card → accepted cards in deck                      | F-01          | US-01, FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-009 | done        |
 | S-02 | deck-management        | create a card manually; edit and delete any saved card                                             | S-01          | FR-008, FR-010, FR-011                                                | done        |
-| S-03 | srs-review-session     | start a spaced-repetition review session, answer due cards, have schedule updated                  | S-01, F-01    | US-02, FR-012, FR-013                                                 | done        |
-| S-04 | ui-improvements        | use a clear post-login dashboard and comfortably sized primary controls                            | S-01          | NFR (usability)                                                       | ready       |
+| S-03 | srs-review-session     | start a spaced-repetition review session, answer due cards, have schedule updated                  | S-01, F-01    | US-02, FR-012, FR-013                                                 | ready       |
+| S-04 | ui-improvements        | use a clear post-login dashboard and comfortably sized primary controls                            | S-01          | NFR (usability)                                                       | done        |
 
 ## Streams
 
@@ -136,7 +136,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Visual changes must preserve the existing responsive layout and avoid changing shared control defaults in ways that unintentionally affect generation or deck workflows.
-- **Status:** ready
+- **Status:** done
 
 ## Backlog Handoff
 
@@ -171,4 +171,5 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **S-01: user can paste a block of text, trigger AI card generation, review generated cards one-by-one (accepting, editing front/back, or deleting each), and see accepted cards listed in their personal deck.** — Archived 2026-09-03 → `context/archive/2026-08-23-first-gated-generation/`. Lesson: —.
 - **F-01: (foundation) cards table migrated to Supabase with RLS policies that scope all card data strictly to the authenticated user; the Supabase client can create, read, update, and delete card rows.** — Archived 2026-09-03 → `context/archive/2026-08-15-card-schema/`. Lesson: —.
 - **S-02: user can create a card manually (front and back), edit any saved card in their deck, and delete any saved card from their deck.** — Archived 2026-09-06 → `context/archive/2026-09-06-deck-management/`. Lesson: —.
+- **S-04: after signing in, the user lands on the dashboard, and primary dashboard and authentication controls are large enough to be easy to discover and operate.** — Archived 2026-09-10 → `context/archive/2026-09-06-ui-improvements/`. Lesson: —.
 - **S-03: user can start a spaced-repetition review session, see each card due for review and answer it per the SRS answer schema, and have each card's next review date updated according to the chosen SRS algorithm.** — Archived 2026-09-09 → `context/archive/2026-09-06-srs-review-session/`. Lesson: —.
