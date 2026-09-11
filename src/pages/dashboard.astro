@@ -17,8 +17,8 @@ const { user } = Astro.locals;
           Dashboard
         </CardTitle>
         <CardDescription className="text-center text-blue-100/80">
-          Welcome back, <span class="font-semibold text-white">{user?.email}</span>. Jump into generating new cards or
-          reviewing your existing deck.
+          Welcome back, <span class="font-semibold text-white">{user?.email}</span>. Jump into generating new cards,
+          see your existing deck or start a review session.
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4 sm:flex-row sm:justify-center">
@@ -36,6 +36,12 @@ const { user } = Astro.locals;
           )}
         >
           My deck
+        </a>
+        <a
+          href="/review"
+          class="rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm transition-colors hover:bg-white/20"
+        >
+          Review
         </a>
       </CardContent>
       <CardFooter className="justify-center border-t border-white/10 pt-6">
