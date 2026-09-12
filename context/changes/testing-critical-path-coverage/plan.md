@@ -277,16 +277,16 @@ N/A (no data model changes; tests are new code only).
 
 #### Automated
 
-- [x] 1.1 Set up Vitest + MSW (or Node mock) + initial test config
-- [x] 1.2 Implement `/api/generate` contract tests (valid response, invalid model, missing credentials)
-- [x] 1.3 Implement error path tests (timeout, provider 500, malformed JSON, missing `cards` key)
-- [x] 1.4 Implement `generateCards()` service tests (happy path, parsing, trimming, capping, schema validation)
-- [x] 1.5 Verify type checking and linting pass
+- [x] 1.1 Set up Vitest + MSW (or Node mock) + initial test config — b3c98a0
+- [x] 1.2 Implement `/api/generate` contract tests (valid response, invalid model, missing credentials) — b3c98a0
+- [x] 1.3 Implement error path tests (timeout, provider 500, malformed JSON, missing `cards` key) — b3c98a0
+- [x] 1.4 Implement `generateCards()` service tests (happy path, parsing, trimming, capping, schema validation) — b3c98a0
+- [x] 1.5 Verify type checking and linting pass — b3c98a0
 
 #### Manual
 
-- [ ] 1.6 Spot-check mock provider setup (confirm no real API calls leak through)
-- [ ] 1.7 Verify error messages are user-friendly
+- [x] 1.6 Spot-check mock provider setup (confirm no real API calls leak through) — b3c98a0
+- [x] 1.7 Verify error messages are user-friendly — b3c98a0
 
 ### Phase 2: Semantic Validation (Reference Vectors + Integration)
 
