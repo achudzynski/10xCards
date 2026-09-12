@@ -16,22 +16,24 @@ Users sign in, land on `/dashboard`, and see three clear sections: a welcome hea
 
 ## Key Decisions Made
 
-| Decision | Choice | Why (1 sentence) |
-| --- | --- | --- |
-| Button sizing | Use existing `Button size="lg"` + `asChild` | Already available in `src/components/ui/button.tsx`; no new size token or variant needed. |
-| Sign-out treatment | Outline/ghost variant, placed below/beside primary CTAs | Keeps it operable but visually secondary to the main task CTAs. |
-| Review CTA | Omit entirely | `s-03` review routes/components don't exist yet — no safe destination to link to; avoids scope collision. |
-| Auth submit harmonization | Conditional — only if a real visual mismatch is found in Phase 2 | `SubmitButton` is already a prominent full-width CTA; changing it should be justified, not assumed. |
-| Component boundary | `dashboard.astro` stays composition root; optional `DashboardActions.astro` only if the file grows unwieldy | Keeps isolation from generate/deck/review components per scope. |
+| Decision                  | Choice                                                                                                      | Why (1 sentence)                                                                                          |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| Button sizing             | Use existing `Button size="lg"` + `asChild`                                                                 | Already available in `src/components/ui/button.tsx`; no new size token or variant needed.                 |
+| Sign-out treatment        | Outline/ghost variant, placed below/beside primary CTAs                                                     | Keeps it operable but visually secondary to the main task CTAs.                                           |
+| Review CTA                | Omit entirely                                                                                               | `s-03` review routes/components don't exist yet — no safe destination to link to; avoids scope collision. |
+| Auth submit harmonization | Conditional — only if a real visual mismatch is found in Phase 2                                            | `SubmitButton` is already a prominent full-width CTA; changing it should be justified, not assumed.       |
+| Component boundary        | `dashboard.astro` stays composition root; optional `DashboardActions.astro` only if the file grows unwieldy | Keeps isolation from generate/deck/review components per scope.                                           |
 
 ## Scope
 
 **In scope:**
+
 - `src/pages/dashboard.astro` layout restructuring (welcome, primary CTAs, secondary sign-out)
 - Optional presentational extraction to `src/components/dashboard/*`
 - Conditional sizing tweak to `src/components/auth/SubmitButton.tsx`
 
 **Out of scope:**
+
 - `GenerateWizard.tsx`, `DeckView.tsx`, and their page shells
 - `src/pages/api/review/*`, `src/pages/review/*`, `supabase/migrations/*` (all `s-03` territory)
 - New `buttonVariants` size tokens, global typography/spacing changes
@@ -43,11 +45,11 @@ Pure presentation-layer change confined to the dashboard page and (conditionally
 
 ## Phases at a Glance
 
-| Phase | What it delivers | Key risk |
-| --- | --- | --- |
-| 1. Dashboard layout and CTA upsizing | Three-section dashboard with large primary CTAs and secondary sign-out | Larger controls could crowd/wrap on narrow screens |
-| 2. Auth control harmonization check | Verified (and if needed, adjusted) sign-in submit prominence | Unnecessary change if mismatch isn't real — kept conditional |
-| 3. Verification | Lint/build pass + full regression check against generate/deck/review scope | Accidental touch of `s-03` territory |
+| Phase                                | What it delivers                                                           | Key risk                                                     |
+| ------------------------------------ | -------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| 1. Dashboard layout and CTA upsizing | Three-section dashboard with large primary CTAs and secondary sign-out     | Larger controls could crowd/wrap on narrow screens           |
+| 2. Auth control harmonization check  | Verified (and if needed, adjusted) sign-in submit prominence               | Unnecessary change if mismatch isn't real — kept conditional |
+| 3. Verification                      | Lint/build pass + full regression check against generate/deck/review scope | Accidental touch of `s-03` territory                         |
 
 **Prerequisites:** None beyond `S-01` (already done); no dependency on `s-03`.
 **Estimated effort:** ~1 session across 3 phases (presentation-only change, no test runner in repo).

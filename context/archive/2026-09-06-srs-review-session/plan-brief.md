@@ -16,13 +16,13 @@ User visits `/review`, works through one due card at a time (reveal answer, pick
 
 ## Key Decisions Made
 
-| Decision | Choice | Why (1 sentence) |
-| --- | --- | --- |
-| SRS algorithm | Pure in-repo SM-2 function (`sm2.ts`) | Roadmap already resolved OQ-3 to SM-2 and named the exact columns needed — no external library required. |
-| Progress durability | New `review_sessions` table, server-backed | NFR requires refresh/close survival; client-only state can't guarantee that. |
-| Answer persistence | Card + session updated in one route/service call | Keeps the flow simple; escalate to a Postgres RPC only if manual QA finds real atomicity issues. |
-| Concurrency control | One active session per user via partial unique index | Removes ambiguity from multi-tab usage without application-level locking. |
-| UI placement | New isolated `/review` page + `src/components/review/*` | Avoids merge conflicts with the parallel S-04 (ui-improvements) slice touching dashboard/shared buttons. |
+| Decision            | Choice                                                  | Why (1 sentence)                                                                                         |
+| ------------------- | ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| SRS algorithm       | Pure in-repo SM-2 function (`sm2.ts`)                   | Roadmap already resolved OQ-3 to SM-2 and named the exact columns needed — no external library required. |
+| Progress durability | New `review_sessions` table, server-backed              | NFR requires refresh/close survival; client-only state can't guarantee that.                             |
+| Answer persistence  | Card + session updated in one route/service call        | Keeps the flow simple; escalate to a Postgres RPC only if manual QA finds real atomicity issues.         |
+| Concurrency control | One active session per user via partial unique index    | Removes ambiguity from multi-tab usage without application-level locking.                                |
+| UI placement        | New isolated `/review` page + `src/components/review/*` | Avoids merge conflicts with the parallel S-04 (ui-improvements) slice touching dashboard/shared buttons. |
 
 ## Scope
 
@@ -36,13 +36,13 @@ Five-layer bottom-up build mirroring prior slices: migration (SRS columns + `rev
 
 ## Phases at a Glance
 
-| Phase | What it delivers | Key risk |
-| --- | --- | --- |
-| 1. Schema and shared contracts | SRS columns, `review_sessions` table + RLS, shared types | RLS/migration correctness — data-leak risk if wrong from the start |
-| 2. Review services | Pure SM-2 function, session orchestration service | Getting the SM-2 formula and ordering semantics right |
-| 3. Review API | `/api/review/session`, `/current`, `/answer` | Answer-submission atomicity (card + session pointer) |
-| 4. Review UI | `/review` page, `ReviewSessionView` + child components | Refresh-resume correctness; avoiding S-04 shared-component overlap |
-| 5. Verification and polish | Full lint/build pass, manual QA scenarios, S-04 conflict check | Multi-tab / stale-submission edge cases |
+| Phase                          | What it delivers                                               | Key risk                                                           |
+| ------------------------------ | -------------------------------------------------------------- | ------------------------------------------------------------------ |
+| 1. Schema and shared contracts | SRS columns, `review_sessions` table + RLS, shared types       | RLS/migration correctness — data-leak risk if wrong from the start |
+| 2. Review services             | Pure SM-2 function, session orchestration service              | Getting the SM-2 formula and ordering semantics right              |
+| 3. Review API                  | `/api/review/session`, `/current`, `/answer`                   | Answer-submission atomicity (card + session pointer)               |
+| 4. Review UI                   | `/review` page, `ReviewSessionView` + child components         | Refresh-resume correctness; avoiding S-04 shared-component overlap |
+| 5. Verification and polish     | Full lint/build pass, manual QA scenarios, S-04 conflict check | Multi-tab / stale-submission edge cases                            |
 
 **Prerequisites:** S-01 (first-gated-generation) and F-01 (card-schema) are done; SM-2 chosen for OQ-3.
 **Estimated effort:** ~5 phases, roughly 1 implementation session per phase.

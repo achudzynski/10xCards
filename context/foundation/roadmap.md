@@ -40,13 +40,13 @@ one (accept / edit / delete), and accepted cards appear in their personal deck.
 
 ## At a glance
 
-| ID   | Change ID              | Outcome (user can …)                                                                               | Prerequisites | PRD refs                                                              | Status      |
-| ---- | ---------------------- | -------------------------------------------------------------------------------------------------- | ------------- | --------------------------------------------------------------------- | ----------- |
-| F-01 | card-schema            | (foundation) cards table with RLS policies migrated to Supabase; client ready to persist card data | —             | FR-004, FR-009, NFR (data privacy, session durability)                | done        |
-| S-01 | first-gated-generation | paste text → AI-generated card list → gate each card → accepted cards in deck                      | F-01          | US-01, FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-009 | done        |
-| S-02 | deck-management        | create a card manually; edit and delete any saved card                                             | S-01          | FR-008, FR-010, FR-011                                                | done        |
-| S-03 | srs-review-session     | start a spaced-repetition review session, answer due cards, have schedule updated                  | S-01, F-01    | US-02, FR-012, FR-013                                                 | ready       |
-| S-04 | ui-improvements        | use a clear post-login dashboard and comfortably sized primary controls                            | S-01          | NFR (usability)                                                       | done        |
+| ID   | Change ID              | Outcome (user can …)                                                                               | Prerequisites | PRD refs                                                              | Status |
+| ---- | ---------------------- | -------------------------------------------------------------------------------------------------- | ------------- | --------------------------------------------------------------------- | ------ |
+| F-01 | card-schema            | (foundation) cards table with RLS policies migrated to Supabase; client ready to persist card data | —             | FR-004, FR-009, NFR (data privacy, session durability)                | done   |
+| S-01 | first-gated-generation | paste text → AI-generated card list → gate each card → accepted cards in deck                      | F-01          | US-01, FR-001, FR-002, FR-003, FR-004, FR-005, FR-006, FR-007, FR-009 | done   |
+| S-02 | deck-management        | create a card manually; edit and delete any saved card                                             | S-01          | FR-008, FR-010, FR-011                                                | done   |
+| S-03 | srs-review-session     | start a spaced-repetition review session, answer due cards, have schedule updated                  | S-01, F-01    | US-02, FR-012, FR-013                                                 | ready  |
+| S-04 | ui-improvements        | use a clear post-login dashboard and comfortably sized primary controls                            | S-01          | NFR (usability)                                                       | done   |
 
 ## Streams
 

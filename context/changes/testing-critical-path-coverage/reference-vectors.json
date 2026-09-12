@@ -1,0 +1,154 @@
+[
+  {
+    "source_text": "Photosynthesis is the process by which plants convert light energy into chemical energy stored in glucose. It occurs in two main stages: the light-dependent reactions in the thylakoid membranes and the light-independent reactions (Calvin cycle) in the stroma. Chlorophyll absorbs light energy, which powers the transfer of electrons through the electron transport chain.",
+    "expected_cards": [
+      {
+        "front": "What is photosynthesis?",
+        "back": "Process by which plants convert light energy into chemical energy stored in glucose"
+      },
+      {
+        "front": "Where do light-dependent reactions occur?",
+        "back": "In the thylakoid membranes"
+      },
+      {
+        "front": "What does chlorophyll do?",
+        "back": "Absorbs light energy and powers electron transfer in the electron transport chain"
+      }
+    ],
+    "domain": "biology",
+    "difficulty": "intermediate"
+  },
+  {
+    "source_text": "The French Revolution (1789-1799) was a period of radical social and political upheaval in France. Key causes included financial crisis, Enlightenment ideas, and widespread food shortages. Major events included the storming of the Bastille (1789), the Declaration of the Rights of Man (1789), and the Reign of Terror (1793-1794) under Robespierre.",
+    "expected_cards": [
+      {
+        "front": "When did the French Revolution occur?",
+        "back": "1789-1799"
+      },
+      {
+        "front": "What were the main causes of the French Revolution?",
+        "back": "Financial crisis, Enlightenment ideas, and widespread food shortages"
+      },
+      {
+        "front": "What was the Reign of Terror?",
+        "back": "A period of mass executions (1793-1794) under Robespierre's leadership"
+      }
+    ],
+    "domain": "history",
+    "difficulty": "beginner"
+  },
+  {
+    "source_text": "JavaScript promises are objects representing the eventual completion or failure of an asynchronous operation. A promise is in one of three states: pending (initial state), fulfilled (operation completed successfully), or rejected (operation failed). Promises can be chained using .then() and .catch() methods, or handled with async/await syntax introduced in ES2017.",
+    "expected_cards": [
+      {
+        "front": "What are the three states of a JavaScript promise?",
+        "back": "Pending, fulfilled, and rejected"
+      },
+      {
+        "front": "How can promises be handled in modern JavaScript?",
+        "back": "Using .then() and .catch() methods, or async/await syntax"
+      },
+      {
+        "front": "When was async/await syntax introduced to JavaScript?",
+        "back": "ES2017"
+      }
+    ],
+    "domain": "programming",
+    "difficulty": "intermediate"
+  },
+  {
+    "source_text": "The water cycle, also known as the hydrologic cycle, is the continuous movement of water on Earth. Water evaporates from oceans, lakes, and rivers, forms clouds through condensation, and returns to Earth as precipitation (rain, snow). Runoff flows into streams and rivers, eventually returning to the ocean, completing the cycle.",
+    "expected_cards": [
+      {
+        "front": "What is the water cycle?",
+        "back": "The continuous movement of water on Earth through evaporation, condensation, and precipitation"
+      },
+      {
+        "front": "What is the first step in the water cycle?",
+        "back": "Evaporation from oceans, lakes, and rivers"
+      },
+      {
+        "front": "How does water return to the ocean?",
+        "back": "Through runoff in streams and rivers after precipitation"
+      }
+    ],
+    "domain": "science",
+    "difficulty": "beginner"
+  },
+  {
+    "source_text": "REST (Representational State Transfer) is an architectural style for designing networked applications. RESTful APIs use standard HTTP methods: GET to retrieve resources, POST to create, PUT to update, and DELETE to remove. Resources are identified by URIs, and the API is stateless, meaning each request contains all necessary information.",
+    "expected_cards": [
+      {
+        "front": "What is REST?",
+        "back": "An architectural style for designing networked applications using standard HTTP methods"
+      },
+      {
+        "front": "What HTTP method is used to create a new resource in a RESTful API?",
+        "back": "POST"
+      },
+      {
+        "front": "What does it mean for a RESTful API to be stateless?",
+        "back": "Each request contains all necessary information; the server does not store client state"
+      }
+    ],
+    "domain": "programming",
+    "difficulty": "intermediate"
+  },
+  {
+    "source_text": "Mitochondria are often called the powerhouse of the cell because they produce ATP (adenosine triphosphate) through cellular respiration. This organelle has a double membrane: the outer membrane controls what enters and exits, while the inner membrane has folds called cristae that increase surface area for chemical reactions. Mitochondria contain their own DNA and can replicate independently.",
+    "expected_cards": [
+      {
+        "front": "Why are mitochondria called the powerhouse of the cell?",
+        "back": "Because they produce ATP through cellular respiration"
+      },
+      {
+        "front": "What are cristae?",
+        "back": "Folds in the inner mitochondrial membrane that increase surface area for chemical reactions"
+      },
+      {
+        "front": "Do mitochondria have their own DNA?",
+        "back": "Yes, and they can replicate independently"
+      }
+    ],
+    "domain": "biology",
+    "difficulty": "intermediate"
+  },
+  {
+    "source_text": "CSS Grid is a two-dimensional layout system that divides a container into rows and columns. Unlike Flexbox, which is one-dimensional, Grid allows precise control over both horizontal and vertical placement of elements. Grid items can span multiple rows and columns, and the grid can be responsive using media queries or the fr (fractional) unit.",
+    "expected_cards": [
+      {
+        "front": "How does CSS Grid differ from Flexbox?",
+        "back": "Grid is two-dimensional (rows and columns), while Flexbox is one-dimensional"
+      },
+      {
+        "front": "What is the fr unit in CSS Grid?",
+        "back": "A fractional unit that allows responsive grid sizing"
+      },
+      {
+        "front": "Can grid items span multiple rows and columns?",
+        "back": "Yes, Grid allows items to span multiple rows and columns"
+      }
+    ],
+    "domain": "programming",
+    "difficulty": "beginner"
+  },
+  {
+    "source_text": "The Great Wall of China was built over many centuries to protect against invasions from northern nomadic groups. Construction began as early as the 7th century BCE with smaller defensive walls, but the most famous sections were built during the Ming Dynasty (1368-1644). The wall stretches over 13,000 miles across northern China and is considered one of the greatest engineering achievements in human history.",
+    "expected_cards": [
+      {
+        "front": "When was most of the Great Wall of China built?",
+        "back": "During the Ming Dynasty (1368-1644)"
+      },
+      {
+        "front": "What was the primary purpose of the Great Wall of China?",
+        "back": "To protect against invasions from northern nomadic groups"
+      },
+      {
+        "front": "How long is the Great Wall of China?",
+        "back": "Over 13,000 miles"
+      }
+    ],
+    "domain": "history",
+    "difficulty": "beginner"
+  }
+]

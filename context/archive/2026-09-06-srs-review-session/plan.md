@@ -93,6 +93,7 @@ Add the SRS columns to `cards`, introduce the durable `review_sessions` table wi
 **Intent**: add the minimal persisted state SM-2 requires on each card, defaulting existing cards to immediately due.
 
 **Contract**:
+
 - Add to `public.cards`: `ease_factor numeric(4,2) not null default 2.50`, `interval integer not null default 0`, `repetitions integer not null default 0`, `due_date timestamptz not null default now()`.
 - Add index `cards_user_due_date_idx` on `(user_id, due_date)`.
 - No new RLS policies needed on `cards` — existing per-operation policies already cover `UPDATE` on owned rows.
@@ -104,6 +105,7 @@ Add the SRS columns to `cards`, introduce the durable `review_sessions` table wi
 **Intent**: persist active session state (queue snapshot + progress pointer) independently of client memory, so refresh/close never loses place.
 
 **Contract**:
+
 - `public.review_sessions`: `id uuid primary key default gen_random_uuid()`, `user_id uuid not null references auth.users(id) on delete cascade`, `status text not null check (status in ('active','completed'))`, `card_order jsonb not null` (ordered array of card UUIDs captured at session start), `current_index integer not null default 0`, `answered_count integer not null default 0`, `total_count integer not null`, `created_at timestamptz not null default now()`, `updated_at timestamptz not null default now()`, `completed_at timestamptz null`.
 - Partial unique index enforcing one active session per user: `create unique index review_sessions_one_active_per_user_idx on public.review_sessions(user_id) where status = 'active';`
 - Standard lookup index on `(user_id, status)`.
@@ -155,6 +157,7 @@ Implement the SM-2 scheduling algorithm as a pure function and the DB-backed rev
 **Intent**: deterministic scheduling logic with no Supabase dependency, so the algorithm is isolated from persistence and the client/server never diverge on scheduling math.
 
 **Contract**: function taking current `{ easeFactor, interval, repetitions }`, a rating `0-5`, and a review timestamp, returning `{ nextEaseFactor, nextInterval, nextRepetitions, nextDueDate }`.
+
 - Rating `< 3` (failed recall): `repetitions = 0`, `interval = 1`, `due_date = now + 1 day`.
 - Rating `>= 3` (success): `repetitions === 0` -> `interval = 1`; `repetitions === 1` -> `interval = 6`; else `interval = round(previousInterval * easeFactor)`; `repetitions += 1`.
 - Ease factor update: `ef' = ef + (0.1 - (5 - q) * (0.08 + (5 - q) * 0.02))`, floored at `1.3`.

@@ -53,22 +53,24 @@ Before any reading, identify what kinds of upstream artifacts the user passed in
 
 **Question count and focus scale with what's provided:**
 
-| Upstream artifacts          | LOW   | MEDIUM | HIGH  | What changes vs. baseline                                                                                                              |
-| --------------------------- | ----- | ------ | ----- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| Task only (baseline)        | 4–6   | 7–10   | 11–15 | Full questioning across all relevant categories.                                                                                       |
-| Task + research             | 3–5   | 5–7    | 8–11  | Skip questions whose answer is already in the research doc. Don't re-spawn sub-agents to find what research already mapped.            |
-| Task + frame                | 2–3   | 4–6    | 7–9   | Skip [D]iagnostic categories — frame settled problem framing. Treat the Reframed (or Confirmed) Problem Statement as authoritative.    |
-| Task + frame + research     | 1–2   | 3–5    | 5–7   | Skip both. Ask only [S]olution-design questions that genuinely need user input.                                                        |
+| Upstream artifacts      | LOW | MEDIUM | HIGH  | What changes vs. baseline                                                                                                           |
+| ----------------------- | --- | ------ | ----- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Task only (baseline)    | 4–6 | 7–10   | 11–15 | Full questioning across all relevant categories.                                                                                    |
+| Task + research         | 3–5 | 5–7    | 8–11  | Skip questions whose answer is already in the research doc. Don't re-spawn sub-agents to find what research already mapped.         |
+| Task + frame            | 2–3 | 4–6    | 7–9   | Skip [D]iagnostic categories — frame settled problem framing. Treat the Reframed (or Confirmed) Problem Statement as authoritative. |
+| Task + frame + research | 1–2 | 3–5    | 5–7   | Skip both. Ask only [S]olution-design questions that genuinely need user input.                                                     |
 
 **Principle**: every artifact passed in is a source of decisions already made. Reading them counts as listening to the user. Don't ask the user what they already wrote down.
 
 **When a frame is present**, read it FULLY and treat as authoritative:
+
 - Copy the **Reported Observation** + **Reframed (or Confirmed) Problem Statement** as the task definition. Do not re-question the framing.
 - Lift the **Hypothesis Investigation** table and **Narrowing Signals** into your "Current State Analysis" — this work is already done.
 - If the frame **Confidence: LOW** is flagged, surface that in the plan's "Open Risks & Assumptions" and ask ONE clarifying question about how to proceed (verify first, or plan with risk acknowledged).
 - Do NOT re-investigate the framing. Frame owns problem framing; you own solution design.
 
 **When research is present**, read it FULLY and use as the codebase baseline:
+
 - "Code References" section IS your codebase grounding — don't re-spawn Explore agents to find the same files.
 - "Architecture Insights" feed directly into "Current State Analysis."
 - Spawn sub-agents only to fill specific gaps research didn't cover (e.g., the exact files this plan will modify if research was broader).
@@ -249,7 +251,7 @@ Before any reading, identify what kinds of upstream artifacts the user passed in
    - Questions with obvious answers given the context already provided
    - Preferences that don't affect the plan's structure or success
 
-   **CRITICAL**: You MUST ask the number of questions appropriate to the confirmed complexity level *and* the upstream-artifacts scaling from Step 1.0. Do not shortcut this when no upstream artifacts were provided — thorough questioning prevents costly rework. Equally, do not pad questions when a frame or research already covers the ground — re-asking erodes trust in the upstream artifact. Each question should force a real decision, not confirm something obvious.
+   **CRITICAL**: You MUST ask the number of questions appropriate to the confirmed complexity level _and_ the upstream-artifacts scaling from Step 1.0. Do not shortcut this when no upstream artifacts were provided — thorough questioning prevents costly rework. Equally, do not pad questions when a frame or research already covers the ground — re-asking erodes trust in the upstream artifact. Each question should force a real decision, not confirm something obvious.
 
 ### Step 2: Research & Discovery
 
@@ -363,7 +365,7 @@ After structure approval:
    - **Sync the roadmap** (best effort): if `context/foundation/roadmap.md` carries an item whose `Change ID` equals `<change-id>`, flip that item to `Status: planning`. See "## Roadmap status sync" below. Never blocks; most changes won't trace to a roadmap.
 2. **Use this template structure** (Phase blocks contain plain bullets — `- ` not `- [ ]` — and a single canonical `## Progress` section at the bottom owns the checkbox state, see `references/progress-format.md` for the contract):
 
-````markdown
+```markdown
 # [Feature/Task Name] Implementation Plan
 
 ## Overview
@@ -501,7 +503,7 @@ A code snippet appears here ONLY when the change is non-obvious — a tricky reg
 #### Automated
 
 - [ ] 2.1 <…>
-````
+```
 
 The Progress section is mechanical — emit one `### Phase N: <name>` per phase, with `#### Automated` / `#### Manual` subsections enumerating every Success Criteria bullet from that phase as `- [ ] <phase>.<index> <title>`. Omit empty subsections. The Phase blocks themselves carry plain `- ` bullets (no checkboxes); the `## Progress` section is the only place `[ ]` / `[x]` appear.
 
@@ -536,11 +538,11 @@ After writing the full plan, generate a concise brief that gives the reader the 
 
 When a frame brief or research doc was the input, mark the **Source** column to show where the decision came from. This lets readers see the lineage: what was settled upstream vs decided in this planning session.
 
-| Decision                       | Choice            | Why (1 sentence)  | Source           |
-| ------------------------------ | ----------------- | ----------------- | ---------------- |
-| [Decision area]                | [What was chosen] | [Core rationale]  | Frame / Research / Plan |
-| [Decision area]                | [Choice]          | [Rationale]       | Frame / Research / Plan |
-| ...                            | ...               | ...               | ...              |
+| Decision        | Choice            | Why (1 sentence) | Source                  |
+| --------------- | ----------------- | ---------------- | ----------------------- |
+| [Decision area] | [What was chosen] | [Core rationale] | Frame / Research / Plan |
+| [Decision area] | [Choice]          | [Rationale]      | Frame / Research / Plan |
+| ...             | ...               | ...              | ...                     |
 
 (Omit the `Source` column if no upstream artifacts were provided — every row would be `Plan`.)
 
@@ -631,7 +633,7 @@ For non-software: structure, workflow, key dependencies.]
 
 `context/foundation/roadmap.md` (produced by `/10x-roadmap`) indexes each Foundation/Slice by a stable **Change ID**. As planning turns a roadmap item into a concrete change folder + plan, mark that item **`planning`** so the roadmap reflects that the item has left the backlog and entered active work. `/10x-implement` later advances the same item to `in-progress`, and `/10x-archive` closes it to `done`.
 
-Do this in Step 4 (right after the `change.md` → `planned` stamp). The lookup is **mandatory**; "best effort" scopes only the *edits* — a missing roadmap or a not-found target is skipped silently and never blocks, prompts, or aborts the run. Do not skip the check on the assumption there's no roadmap.
+Do this in Step 4 (right after the `change.md` → `planned` stamp). The lookup is **mandatory**; "best effort" scopes only the _edits_ — a missing roadmap or a not-found target is skipped silently and never blocks, prompts, or aborts the run. Do not skip the check on the assumption there's no roadmap.
 
 1. Check if `context/foundation/roadmap.md` exists. If absent, skip this step silently.
 2. Read the file. Look for `<change-id>` used as a `Change ID`:
@@ -639,11 +641,13 @@ Do this in Step 4 (right after the `change.md` → `planned` stamp). The lookup 
    - and in the `## Foundations` / `## Slices` bodies — the `### <ID>: …` block that contains a `- **Change ID:** <change-id>` line.
 
    Match is exact-string only. **No match** → print `ℹ context/foundation/roadmap.md has no item with Change ID "<change-id>" — roadmap left untouched.` and stop here.
+
 3. **Match found** → if the item's `- **Status:**` is already `planning`, `in-progress`, or `done`, leave it untouched (**forward-only**: never regress a more-advanced status) and stop. Otherwise apply both edits using your AI coding assistant's file editing capabilities — each independent and best effort; skip a sub-edit whose target isn't where the `/10x-roadmap` template puts it, and note the skip. Touch only the `Status` field:
    1. **`## At a glance`** — set the matched row's **Status** cell to `planning`.
    2. **Item body** — rewrite the item's `- **Status:**` line to `- **Status:** planning`.
 
    Then bump the roadmap frontmatter `updated:` to `<today>` (skip if there is no frontmatter).
+
 4. `/10x-plan` does not commit its own artifacts; leave the flip in the working tree. It is committed later alongside the change's first `/10x-implement` phase (which re-flips the same item to `in-progress`).
 
 ## Important Guidelines
@@ -747,12 +751,13 @@ Mixed: `Loading UX` is `[S]` (UI behavior — solution detail); `Scale` is `[D]`
 Ask the user: "What should the user see while new items load?"
 Header: "Loading UX"
 Options:
+
 - "Inline spinner" (description: "Small spinner below existing content. · Strength: User keeps seeing current items, minimal UI work. · Tradeoff: Feels slower than skeleton — users see a generic spinner instead of content shape.")
 - "⭐ Recommended: Skeleton screens" (description: "Placeholder shapes matching item layout. · Strength: Perceived performance is 30-40% better — matches existing LoadingSkeleton component pattern. · Tradeoff: Requires a skeleton variant per item type; breaks if layout changes.")
 - "Full-page spinner" (description: "Replace content with spinner. · Strength: Simplest to implement — one component, no layout concerns. · Tradeoff: Blocks all interaction; feels broken on slow connections.")
-Ask the user: "How many items should this handle gracefully?"
-Header: "Scale"
-Options:
+  Ask the user: "How many items should this handle gracefully?"
+  Header: "Scale"
+  Options:
 - "⭐ Recommended: Hundreds" (description: "Standard offset pagination. · Strength: Simple, well-understood, works with existing SQL queries. · Tradeoff: Breaks down past ~5k items — acceptable given current data volumes.")
 - "Thousands" (description: "Cursor-based pagination + virtual scrolling. · Strength: Handles growth without performance cliff. · Tradeoff: 2-3x more implementation work; changes API contract.")
 - "Tens of thousands" (description: "Server-side filtering + virtual list + search. · Strength: Scales indefinitely. · Tradeoff: Significant complexity; requires search index and new API design.")
@@ -764,12 +769,13 @@ Mixed: `Outcome` is `[D]` (defines what success looks like — pure problem fram
 Ask the user: "What should the learner be able to DO after this module — not just know?"
 Header: "Outcome"
 Options:
+
 - "⭐ Recommended: Build a working prototype" (description: "Learner produces a functional artifact using the techniques taught. · Strength: Forces genuine skill transfer — the artifact proves competence. Matches the 'Innovate' lesson format from 10xDevs3. · Tradeoff: Requires well-designed starter templates and clear acceptance criteria; takes 2-3x longer to prep.")
 - "Complete a guided exercise" (description: "Step-by-step walkthrough with expected output. · Strength: Low barrier — everyone finishes, builds confidence. · Tradeoff: May produce 'tutorial zombies' who can follow but not apply independently.")
 - "Pass a knowledge check" (description: "Quiz or code review proving conceptual understanding. · Strength: Fast to create, easy to grade at scale. · Tradeoff: Tests recognition not production — learner may understand but not be able to execute.")
-Ask the user: "How should this module handle different skill levels in the audience?"
-Header: "Levels"
-Options:
+  Ask the user: "How should this module handle different skill levels in the audience?"
+  Header: "Levels"
+  Options:
 - "Single track, advanced" (description: "One path targeting experienced devs. · Strength: Deep content, no hand-holding, respects expert time. · Tradeoff: Alienates beginners — they'll drop off or flood support channels.")
 - "⭐ Recommended: Layered depth" (description: "Core path everyone follows + optional deep-dive sections. · Strength: Everyone gets value; advanced learners self-select into harder material. · Tradeoff: More content to maintain; risk of 'optional' sections being ignored.")
 - "Separate beginner/advanced tracks" (description: "Two parallel paths diverging early. · Strength: Each audience gets perfectly targeted content. · Tradeoff: 2x production cost; splitting a small cohort may hurt community dynamics.")
@@ -781,6 +787,7 @@ Options:
 Ask the user: "What's the primary bottleneck in the current newsletter pipeline?"
 Header: "Bottleneck"
 Options:
+
 - "⭐ Recommended: Curation takes too long" (description: "Finding and evaluating links is the slow step. · Strength: Directly targets time-to-publish — automating curation yields the biggest time savings based on current pipeline timings. · Tradeoff: Automated curation risks losing the personal editorial voice that subscribers value.")
 - "Writing the commentary" (description: "Links are ready but writing around them is slow. · Strength: AI-assisted drafting can cut this in half. · Tradeoff: Heavy AI drafting can make the newsletter feel generic — needs careful voice calibration.")
 - "Distribution and scheduling" (description: "Content is ready but publishing is manual. · Strength: Easiest to automate — clear inputs and outputs. · Tradeoff: Lowest impact if curation or writing is still the bottleneck.")
