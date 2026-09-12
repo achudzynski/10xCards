@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "hooks": {
+    "postToolUse": [
+      {
+        "type": "command",
+        "matcher": "edit",
+        "powershell": ".\\scripts\\eslint-fix.ps1",
+        "bash": "./scripts/eslint-fix.sh",
+        "timeoutSec": 10
+      },
+      {
+        "type": "command",
+        "matcher": "edit",
+        "powershell": ".\\scripts\\vitest-related.ps1",
+        "bash": "FILE=$(jq -r .tool_input.file_path) && if [ -n \"$FILE\" ] && [[ \"$FILE\" =~ \\.(ts|tsx)$ ]]; then npx vitest related \"$FILE\" --run 2>&1 | head -50; exit $?; fi",
+        "timeoutSec": 30
+      }
+    ]
+  }
+}
