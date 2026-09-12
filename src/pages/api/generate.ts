@@ -3,6 +3,8 @@ import { z } from "zod";
 import { createClient } from "@/lib/supabase";
 import { jsonError, jsonOk } from "@/lib/api";
 import { generateCards, GenerationError } from "@/lib/services/generation";
+import { calculateAverageSimilarity } from "@/lib/services/similarity";
+import referenceVectors from "@/lib/reference-vectors.json";
 import type { GenerateResponse } from "@/types";
 
 export const prerender = false;
@@ -36,6 +38,25 @@ export const POST: APIRoute = async (context) => {
   try {
     const cards = await generateCards(parsed.data.text);
     const response: GenerateResponse = { cards };
+
+    // Semantic logging: calculate similarity against reference vectors (advisory, non-blocking)
+    if (cards.length > 0 && referenceVectors.length > 0) {
+      // Pool all reference cards from all vectors for semantic comparison
+      const allReferenceCards = referenceVectors.flatMap((v) => v.expected_cards);
+      const avgSimilarity = calculateAverageSimilarity(cards, allReferenceCards);
+
+      // Log event for monitoring (informational; does not affect HTTP response)
+      console.info(
+        JSON.stringify({
+          event: "cards_generated",
+          card_count: cards.length,
+          avg_similarity_score: parseFloat(avgSimilarity.toFixed(2)),
+          source_length: parsed.data.text.length,
+          timestamp: new Date().toISOString(),
+        }),
+      );
+    }
+
     return jsonOk(response);
   } catch (error) {
     if (error instanceof GenerationError) {

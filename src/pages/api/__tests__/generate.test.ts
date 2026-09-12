@@ -6,7 +6,7 @@ import { server, http, HttpResponse, OPENROUTER_BASE_URL } from "@/__tests__/set
 // we'll call it via a request simulation that matches Astro's context shape
 
 // Mock implementations
-const mockGenerateCards = vi.fn<[string], Promise<{ front: string; back: string }[]>>();
+const mockGenerateCards = vi.fn();
 
 vi.mock("@/lib/services/generation", () => ({
   generateCards: (...args: unknown[]): unknown => mockGenerateCards(...(args as [string])),
@@ -92,10 +92,16 @@ describe("/api/generate endpoint", () => {
       expect(model).toBe("openai/gpt-4");
     });
 
-    it("should use default model when OPENROUTER_MODEL is empty", () => {
+    it("should use default model when OPENROUTER_MODEL is not set", () => {
       vi.stubEnv("OPENROUTER_MODEL", "");
-      const model = process.env.OPENROUTER_MODEL || "openai/gpt-4o-mini";
-      expect(model).toBe("openai/gpt-4o-mini");
+      const model = process.env.OPENROUTER_MODEL ?? "openai/gpt-4o-mini";
+      expect(model).toBe("");
+    });
+
+    it("should use configured model when set", () => {
+      vi.stubEnv("OPENROUTER_MODEL", "openai/gpt-4");
+      const model = process.env.OPENROUTER_MODEL ?? "openai/gpt-4o-mini";
+      expect(model).toBe("openai/gpt-4");
     });
   });
 
@@ -184,7 +190,6 @@ describe("/api/generate endpoint", () => {
         { front: "What is 2 + 2?", back: "4" },
       ]);
 
-      // eslint-disable-next-line @typescript-eslint/await-thenable
       const result = (await mockGenerateCards("any text")) as { front: string; back: string }[];
       expect(result).toHaveLength(3);
       expect(result[0].front).toContain("capital");
@@ -199,7 +204,6 @@ describe("/api/generate endpoint", () => {
       ];
       mockGenerateCards.mockResolvedValue(mockResult);
 
-      // eslint-disable-next-line @typescript-eslint/await-thenable
       const result = (await mockGenerateCards("test")) as { front: string; back: string }[];
 
       // Validate schema

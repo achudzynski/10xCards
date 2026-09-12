@@ -292,12 +292,12 @@ N/A (no data model changes; tests are new code only).
 
 #### Automated
 
-- [ ] 2.1 Create reference test vectors JSON file (~5-10 curated examples)
-- [ ] 2.2 Implement string similarity helper (`src/lib/services/similarity.ts`)
-- [ ] 2.3 Implement string similarity unit tests (edge cases)
-- [ ] 2.4 Implement integration tests with reference vectors
-- [ ] 2.5 Add semantic logging to `/api/generate`
-- [ ] 2.6 Verify type checking and linting pass
+- [x] 2.1 Create reference test vectors JSON file (~5-10 curated examples) — b3c98a0
+- [x] 2.2 Implement string similarity helper (`src/lib/services/similarity.ts`) — b3c98a0
+- [x] 2.3 Implement string similarity unit tests (edge cases) — b3c98a0
+- [x] 2.4 Implement integration tests with reference vectors — b3c98a0
+- [x] 2.5 Add semantic logging to `/api/generate` — b3c98a0
+- [x] 2.6 Verify type checking and linting pass — b3c98a0
 
 #### Manual
 
