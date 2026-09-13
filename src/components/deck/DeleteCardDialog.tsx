@@ -71,8 +71,16 @@ export default function DeleteCardDialog({ open, onOpenChange, card, onDeleted }
         return;
       }
 
-      onDeleted(card.id);
-      onOpenChange(false);
+      try {
+        onDeleted(card.id);
+        onOpenChange(false);
+      } catch (_err) {
+        dispatch({
+          type: "setError",
+          error: "Failed to remove the card from the list. Please try again or refresh the page.",
+        });
+        dispatch({ type: "setDeleting", value: false });
+      }
     } catch {
       dispatch({
         type: "setError",

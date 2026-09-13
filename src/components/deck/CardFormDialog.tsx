@@ -137,8 +137,17 @@ export default function CardFormDialog({ open, onOpenChange, card, onSaved }: Ca
       }
 
       const data = (await res.json()) as { card: Card };
-      onSaved(data.card);
-      onOpenChange(false);
+
+      try {
+        onSaved(data.card);
+        onOpenChange(false);
+      } catch (_err) {
+        dispatch({
+          type: "setSaveError",
+          error: "Failed to update the deck list. Please try again or refresh the page.",
+        });
+        dispatch({ type: "setSaving", value: false });
+      }
     } catch {
       dispatch({
         type: "setSaveError",

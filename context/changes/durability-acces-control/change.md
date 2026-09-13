@@ -1,7 +1,7 @@
 ---
 change_id: durability-acces-control
 title: Durability + access control integration tests (Phase 2)
-status: preparing
+status: implementing
 created: 2026-09-13
 updated: 2026-09-13
 archived_at: null
