@@ -494,9 +494,9 @@ No data migrations are required for Phase 2 — we're adding tests, not changing
 
 #### Automated
 
-- [x] 3.1 Playwright infrastructure configured (playwright.config.ts, auth setup, E2E rules)
-- [x] 3.2 Session persistence test passes (session-persistence.spec.ts)
-- [x] 3.3 Playwright tests pass: `npx playwright test`
+- [x] 3.1 Playwright infrastructure configured (playwright.config.ts, auth setup, E2E rules) — 86fd77e
+- [x] 3.2 Session persistence test passes (session-persistence.spec.ts) — 86fd77e
+- [x] 3.3 Playwright tests pass: `npx playwright test` — 86fd77e
 
 #### Manual
 
