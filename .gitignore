@@ -16,6 +16,12 @@ pnpm-debug.log*
 # environment variables
 .env
 .env.production
+.env*.local
+
+# playwright
+playwright-report/
+test-results/
+tests/e2e/.auth/*.json
 
 # cloudflare
 .dev.vars

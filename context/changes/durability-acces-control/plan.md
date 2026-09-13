@@ -479,11 +479,11 @@ No data migrations are required for Phase 2 — we're adding tests, not changing
 
 #### Automated
 
-- [x] 2.1 Integration test infrastructure (db-setup.ts) created
-- [x] 2.2 Mutation durability tests pass (cards.integration.test.ts)
-- [x] 2.3 RLS boundary tests pass (rls-boundary.integration.test.ts)
-- [x] 2.4 No type errors in new tests
-- [x] 2.5 All tests pass: `npm run test`
+- [x] 2.1 Integration test infrastructure (db-setup.ts) created — f08ec58
+- [x] 2.2 Mutation durability tests pass (cards.integration.test.ts) — f08ec58
+- [x] 2.3 RLS boundary tests pass (rls-boundary.integration.test.ts) — f08ec58
+- [x] 2.4 No type errors in new tests — f08ec58
+- [x] 2.5 All tests pass: `npm run test` — f08ec58
 
 #### Manual
 
@@ -494,11 +494,11 @@ No data migrations are required for Phase 2 — we're adding tests, not changing
 
 #### Automated
 
-- [ ] 3.1 Playwright infrastructure configured (playwright.config.ts)
-- [ ] 3.2 Session persistence test passes (session-persistence.spec.ts)
-- [ ] 3.3 Playwright tests pass: `npx playwright test`
+- [x] 3.1 Playwright infrastructure configured (playwright.config.ts, auth setup, E2E rules)
+- [x] 3.2 Session persistence test passes (session-persistence.spec.ts)
+- [x] 3.3 Playwright tests pass: `npx playwright test`
 
 #### Manual
 
-- [ ] 3.4 Run locally with `--headed` flag; manually verify session resumes after refresh
-- [ ] 3.5 No browser console errors during test
+- [x] 3.4 Run locally with `--headed` flag; manually verify session resumes after refresh
+- [x] 3.5 No browser console errors during test

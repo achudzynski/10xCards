@@ -46,6 +46,22 @@ CI (`@.github/workflows/ci.yml`) runs `astro sync → lint → build` on every p
 - React hooks go in `src/components/hooks/`; services and helpers go in `src/lib/` or `src/lib/services/`.
 - Shared types (entities, DTOs) belong in `src/types.ts`.
 
+## E2E Testing Rules
+
+When generating browser-level E2E tests (Playwright):
+
+- Use `getByRole`, `getByLabel`, `getByText` as primary locators. Fall back to `getByTestId` only when accessibility attributes are ambiguous.
+- Never use CSS selectors, XPath, or DOM structure for locating elements.
+- Each test must be independently runnable — no shared state between tests.
+- Never use `page.waitForTimeout()`. Wait for specific conditions: `toBeVisible()`, `waitForURL()`, `waitForResponse()`.
+- Assert the business outcome, not implementation details.
+- Use unique identifiers (e.g., timestamp suffix) for test data to avoid collisions in parallel runs. Clean up in `afterEach`.
+- Use `storageState` for authentication — never log in through UI in individual tests.
+- Name the test after the risk it protects: `test('session persists after page reload', ...)`, not `test('test 1', ...)`.
+- The assertion must fail if the test-plan risk materializes. Control question: would this test fail if the documented risk came true?
+
+See `context/foundation/test-plan.md` for the risk map each E2E phase protects.
+
 ## Commit & Pull Request Guidelines
 
 No commit history yet — convention to be established. CI requires `lint` and `build` to pass before merging to `master`.
