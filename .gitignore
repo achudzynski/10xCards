@@ -28,3 +28,6 @@ pnpm-debug.log*
 .idea/
 .vs/
 /scripts/eslint-fix.sh
+
+.playwright-cli
+playwright
