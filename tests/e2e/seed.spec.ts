@@ -8,7 +8,7 @@
 //   • Real browser-level concerns (SSR persistence across reload)
 //
 // Reference: https://playwright.dev/docs/best-practices
-/* eslint-disable @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment */
+
 import { test, expect } from "@playwright/test";
 
 test("created deck persists after page reload", async ({ page }) => {

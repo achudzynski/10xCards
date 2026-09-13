@@ -464,26 +464,26 @@ No data migrations are required for Phase 2 — we're adding tests, not changing
 
 #### Automated
 
-- [x] 1.1 Linting passes: `npm run lint`
-- [x] 1.2 Type checking passes: `npm run typecheck`
-- [x] 1.3 Build succeeds: `npm run build`
-- [x] 1.4 Existing tests pass: `npm run test`
+- [x] 1.1 Linting passes: `npm run lint` — 50f5931
+- [x] 1.2 Type checking passes: `npm run typecheck` — 50f5931
+- [x] 1.3 Build succeeds: `npm run build` — 50f5931
+- [x] 1.4 Existing tests pass: `npm run test` — 50f5931
 
 #### Manual
 
-- [x] 1.5 Edit form shows error and stays open when callback throws
-- [x] 1.6 Delete dialog shows error and stays open when callback throws
-- [x] 1.7 User can retry after error
+- [x] 1.5 Edit form shows error and stays open when callback throws — 50f5931
+- [x] 1.6 Delete dialog shows error and stays open when callback throws — 50f5931
+- [x] 1.7 User can retry after error — 50f5931
 
 ### Phase 2: Mutation & RLS Integration Tests (Vitest)
 
 #### Automated
 
-- [ ] 2.1 Integration test infrastructure (db-setup.ts) created
-- [ ] 2.2 Mutation durability tests pass (cards.integration.test.ts)
-- [ ] 2.3 RLS boundary tests pass (rls-boundary.integration.test.ts)
-- [ ] 2.4 No type errors in new tests
-- [ ] 2.5 All tests pass: `npm run test`
+- [x] 2.1 Integration test infrastructure (db-setup.ts) created
+- [x] 2.2 Mutation durability tests pass (cards.integration.test.ts)
+- [x] 2.3 RLS boundary tests pass (rls-boundary.integration.test.ts)
+- [x] 2.4 No type errors in new tests
+- [x] 2.5 All tests pass: `npm run test`
 
 #### Manual
 
