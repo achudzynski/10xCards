@@ -67,7 +67,7 @@ orchestrator updates Status and Change-folder cells.
 | #   | Phase name                  | Goal                                                  | Risks covered | Test types             | Status        | Change folder                  |
 | --- | --------------------------- | ----------------------------------------------------- | ------------- | ---------------------- | ------------- | ------------------------------ |
 | 1   | Critical-path coverage      | Defend AI quality + provider config at cheapest layer | #1, #2        | contract + integration | change opened | testing-critical-path-coverage |
-| 2   | Durability + access control | Protect deck mutations, session recovery, RLS         | #3, #4, #6    | integration            | not started   | —                              |
+| 2   | Durability + access control | Protect deck mutations, session recovery, RLS         | #3, #4, #6    | integration            | completed     | durability-acces-control       |
 | 3   | Algorithm correctness       | Prove SM-2 formula produces correct schedules         | #5            | unit                   | not started   | —                              |
 | 4   | Quality gates               | Wire unit + integration tests into CI; lock floor     | cross-cutting | gates                  | not started   | —                              |
 
@@ -151,9 +151,10 @@ contributors should respect these unless the underlying assumption changes.
 
 ## 8. Freshness Ledger
 
-- Strategy (§1–§5) last reviewed: 2026-09-11
-- Stack versions last verified: 2026-09-11
-- AI-native tool references last verified: N/A (not in scope for Phase 1)
+- **Strategy (§1–§5) last reviewed: 2026-09-11
+- **Stack versions last verified: 2026-09-11
+- **Phase 2 completed: 2026-09-13** (durability-acces-control archived)
+- **AI-native tool references last verified: N/A (not in scope for Phase 1)
 
 Refresh (`/10x-test-plan --refresh`) when:
 
